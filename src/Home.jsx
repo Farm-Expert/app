@@ -1,0 +1,101 @@
+import React from 'react';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import bgImage from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/bg2.jpg"
+import avatar from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/avatar.png"
+import search from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/seach.png"
+import soil from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/soil.jpg"
+import crop from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/crop.jpg"
+import profile from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/profile.png"
+import home from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/home.png"
+import Scroll from './comp/Scroll';
+
+export default function Home({ navigation }) {
+  return (
+    <ImageBackground
+      source={bgImage}
+      style={styles.backgroundImage}
+    >
+      <StatusBar backgroundColor='transparent'
+        barStyle='light-content'
+        color='white'
+        hidden={false}
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+        showHideTransition='slide'
+      />
+      <View className="flex w-full flex-row items-center justify-between">
+        <View>
+          <Text className="text-slate-300 font-bold text-xl text-left">Hi There !!</Text>
+          <Text className="text-white font-bold text-2xl text-left">Happy Farming</Text>
+        </View>
+        <Image source={avatar} style={{ width: 50, height: 50 }} />
+      </View>
+      <View className="rounded-3xl flex gap-2 flex-row items-center justify-center mt-12" style={styles.input}>
+        <Image source={search} style={{ width: 30, height: 30 }} />
+        <TextInput className="font-bold mb-2 text-lg" style={{ width: "80%" }} placeholder="Search crop name...." />
+      </View>
+
+      {/* suggested crops */}
+      <View className="w-full h-28 mt-4">
+        <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
+          <Scroll crop="Rice" />
+          <Scroll crop="Maze" />
+          <Scroll crop="Mango" />
+          <Scroll crop="Pea" />
+          <Scroll crop="Orange" />
+        </ScrollView>
+      </View>
+      <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
+      <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">scroll -></Text></View>
+
+      <View className="flex flex-row items-center justify-center gap-3">
+        <TouchableOpacity activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+          <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+            <Image source={soil} className="rounded-3xl h-full w-full" />
+          </View>
+          <View className='w-full h-1/6' >
+            <Text className="text-black font-bold text-center">Predict Soil</Text>
+            <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+          <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+            <Image source={crop} className="rounded-3xl h-full w-full" />
+          </View>
+          <View className='w-full h-1/6' >
+            <Text className="text-black font-bold text-center">Predict Crop</Text>
+            <Text className="text-center text-slate-500 text-xs">for given Soil Condition</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
+
+      {/* nav */}
+      <View style={{ width: "100%" }} className="absolute bottom-12">
+        <View className="h-16 rounded-full mt-7 overflow-hidden flex flex-row justify-around items-center w-full bg-green-100">
+          <TouchableOpacity className="flex items-center opacity-25 justify-center flex-1"><Image source={home} style={{ width: 30, height: 30 }} /></TouchableOpacity>
+          <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
+          <TouchableOpacity onPress={() => navigation.navigate("Profile")} className="flex-1 flex items-center justify-center"><Image source={profile} style={{ width: 30, height: 30 }} /></TouchableOpacity>
+        </View>
+      </View>
+    </ImageBackground>
+  );
+}
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    paddingTop: 50,
+    resizeMode: 'cover',
+    paddingHorizontal: 30,
+    alignItems: "center"
+  },
+  input: {
+    height: 50,
+    backgroundColor: "white",
+    // borderWidth: 1,
+    marginBottom: 16,
+    paddingLeft: 15,
+    paddingRight: 15,
+    width: '100%',
+  },
+});
