@@ -28,7 +28,7 @@ export default function Home({ navigation }) {
           <Text className="text-slate-300 font-bold text-xl text-left">Hi There !!</Text>
           <Text className="text-white font-bold text-2xl text-left">Happy Farming</Text>
         </View>
-        <Image source={avatar} style={{ width: 50, height: 50 }} />
+        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate("Profile")}><Image source={avatar} style={{ width: 50, height: 50 }} /></TouchableOpacity>
       </View>
       <View className="rounded-3xl flex gap-2 flex-row items-center justify-center mt-12" style={styles.input}>
         <Image source={search} style={{ width: 30, height: 30 }} />
@@ -48,8 +48,8 @@ export default function Home({ navigation }) {
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
       <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">scroll -></Text></View>
 
-      <View className="flex flex-row items-center justify-center gap-3">
-        <TouchableOpacity onPress={()=>navigation.navigate("Soil")} activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+      <View className="flex w-screen p-4 pt-7 h-full flex-row items-start justify-center gap-2">
+        <TouchableOpacity style={{elevation:90}} onPress={()=>navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
           <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
             <Image source={soil} className="rounded-3xl h-full w-full" />
           </View>
@@ -58,7 +58,7 @@ export default function Home({ navigation }) {
             <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity onPress={()=>navigation.navigate("Crop")} activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+        <TouchableOpacity style={{elevation:90}} onPress={()=>navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
           <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
             <Image source={crop} className="rounded-3xl h-full w-full" />
           </View>
@@ -70,13 +70,13 @@ export default function Home({ navigation }) {
       </View>
 
       {/* nav */}
-      <View style={{ width: "100%" }} className="absolute bottom-12">
+      {/* <View style={{ width: "100%" }} className="absolute bottom-12">
         <View className="h-16 rounded-full mt-7 overflow-hidden flex flex-row justify-around items-center w-full bg-green-100">
           <TouchableOpacity className="flex items-center opacity-25 justify-center flex-1"><Image source={home} style={{ width: 30, height: 30 }} /></TouchableOpacity>
           <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
           <TouchableOpacity onPress={() => navigation.navigate("Profile")} className="flex-1 flex items-center justify-center"><Image source={profile} style={{ width: 30, height: 30 }} /></TouchableOpacity>
         </View>
-      </View>
+      </View> */}
     </ImageBackground>
   );
 }
