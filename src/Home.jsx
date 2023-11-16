@@ -38,18 +38,18 @@ export default function Home({ navigation }) {
       {/* suggested crops */}
       <View className="w-full h-28 mt-4">
         <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
-          <Scroll crop="Rice" />
-          <Scroll crop="Maze" />
-          <Scroll crop="Mango" />
-          <Scroll crop="Pea" />
-          <Scroll crop="Orange" />
+          <Scroll crop="Rice" navigation={navigation}/>
+          <Scroll crop="Maze" navigation={navigation}/>
+          <Scroll crop="Mango" navigation={navigation}/>
+          <Scroll crop="Pea" navigation={navigation}/>
+          <Scroll crop="Orange" navigation={navigation}/>
         </ScrollView>
       </View>
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
       <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">scroll -></Text></View>
 
       <View className="flex flex-row items-center justify-center gap-3">
-        <TouchableOpacity activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+        <TouchableOpacity onPress={()=>navigation.navigate("Soil")} activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
           <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
             <Image source={soil} className="rounded-3xl h-full w-full" />
           </View>
@@ -58,7 +58,7 @@ export default function Home({ navigation }) {
             <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+        <TouchableOpacity onPress={()=>navigation.navigate("Crop")} activeOpacity={0.4} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
           <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
             <Image source={crop} className="rounded-3xl h-full w-full" />
           </View>
