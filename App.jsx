@@ -16,7 +16,7 @@ export default function App() {
     <Provider store={Store}>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
+        <Stack.Screen name="/home" component={Home} options={{headerShown:false}}/>
         <Stack.Screen name="Profile" component={Profile} options={{headerShown:false}}/>
         <Stack.Screen name="Predict" component={Predict} options={{headerShown:false}}/>
         <Stack.Screen name="Soil" component={SoilForm} options={{headerShown:false}}/>
