@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar } from 'react-native';
-import profile from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/profile.png"
-import home from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/home.png"
-import bgImage from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/bg3.jpg"
+import profile from "../assets/profile.png"
+import home from "../assets/home.png"
+import bgImage from "../assets/bg3.jpg"
 
 export default function Profile({ navigation }) {
     return (

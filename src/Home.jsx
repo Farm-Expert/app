@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
-import bgImage from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/bg2.jpg"
-import avatar from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/avatar.png"
-import search from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/seach.png"
-import soil from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/soil.jpg"
-import crop from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/crop.jpg"
-import profile from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/profile.png"
-import home from "/home/arjunkumarsoni/Desktop/Code/FARM-EXPERT-APP/assets/home.png"
+import bgImage from "../assets/bg2.jpg"
+import avatar from "../assets/avatar.png"
+import search from "../assets/seach.png"
+import soil from "../assets/soil.jpg"
+import crop from "../assets/crop.jpg"
+import profile from "../assets/profile.png"
+import home from "../assets/home.png"
 import Scroll from './comp/Scroll';
 
 export default function Home({ navigation }) {
