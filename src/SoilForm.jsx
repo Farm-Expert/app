@@ -11,7 +11,7 @@ export default function SoilForm() {
     >
 
     <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
-        <Image source={img} className="h-full w-screen m-0 p-0" style={styles.img} />
+        <Image source={img} className="h-full w-screen m-4 p-4" style={styles.img} />
     </View>
 
     <View className="flex w-screen rounded-3xl flex-row items-center justify-center m-0 p-4 h-80 bg-white">
