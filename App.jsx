@@ -9,6 +9,8 @@ import Profile from './src/Profile';
 import Predict from './src/Predict';
 import SoilForm from './src/SoilForm';
 import CropForm from './src/CropForm';
+import Login from './src/Login';
+import Signup from './src/Signup';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -16,7 +18,9 @@ export default function App() {
     <Provider store={Store}>
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="/home" component={Home} options={{headerShown:false}}/>
+        {/* <Stack.Screen name="Login" component={Login} options={{headerShown:false}}/>
+        <Stack.Screen name="Signup" component={Signup} options={{headerShown:false}}/> */}
+        <Stack.Screen name="Home" component={Home} options={{headerShown:false}}/>
         <Stack.Screen name="Profile" component={Profile} options={{headerShown:false}}/>
         <Stack.Screen name="Predict" component={Predict} options={{headerShown:false}}/>
         <Stack.Screen name="Soil" component={SoilForm} options={{headerShown:false}}/>
