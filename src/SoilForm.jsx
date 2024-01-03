@@ -9,10 +9,10 @@ export default function SoilForm() {
       source={bgimage}
       style={styles.backgroundImage}
     >
-
-      <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
-        <Image source={img} className="h-full w-screen m-0 p-0" style={styles.img} />
-      </View>
+        
+    <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
+        <Image source={img} className="h-full w-screen m-4 p-4" style={styles.img} />
+    </View>
 
       <View className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 m-5 bg-white">
         <TextInput
