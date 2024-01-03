@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from 'react-native'
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+// import { AntDesign } from '@expo/vector-icons';
+// import { Feather } from '@expo/vector-icons';
+// import { Octicons } from '@expo/vector-icons';
+// import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function Signup({ navigation }) {
 
@@ -17,7 +17,7 @@ export default function Signup({ navigation }) {
         <View style={styles.container}>
             <Text style={styles.head}>Sign up</Text>
             <View style={styles.inputbox}>
-                <AntDesign name="user" size={24} color={userfocus===true?"red":"black"} />
+                {/* <AntDesign name="user" size={24} color={userfocus===true?"red":"black"} /> */}
                 <TextInput style={styles.input} placeholder='User Name' 
                     onFocus={()=>{
                         setUserFocus(true)
@@ -29,7 +29,7 @@ export default function Signup({ navigation }) {
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
-                <MaterialCommunityIcons name="email-outline" size={24} color={emailfocus===true?"red":"black"}/>
+                {/* <MaterialCommunityIcons name="email-outline" size={24} color={emailfocus===true?"red":"black"}/> */}
                 <TextInput style={styles.input} placeholder='Email' 
                     onFocus={()=>{
                         setUserFocus(false)
@@ -41,7 +41,7 @@ export default function Signup({ navigation }) {
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
-            <Feather name="phone-call" size={24} color={phonefocus===true?"red":"black"}/>
+            {/* <Feather name="phone-call" size={24} color={phonefocus===true?"red":"black"}/> */}
                 <TextInput style={styles.input} placeholder='Phone Number' 
                     onFocus={()=>{
                         setUserFocus(false)
@@ -63,10 +63,10 @@ export default function Signup({ navigation }) {
                 }}
                 secureTextEntry={showpassword==false?true:false}
                 ></TextInput>
-                <Octicons name={showpassword==false?"eye-closed":"eye"} size={24} 
+                {/* <Octicons name={showpassword==false?"eye-closed":"eye"} size={24} 
                 onPress={()=>{
                     setShowPassword(!showpassword)
-                }}></Octicons>
+                }}></Octicons> */}
             </View>
 
             <TouchableOpacity  style={styles.btn}> onPress={()=>navigation.navigate('Home')}

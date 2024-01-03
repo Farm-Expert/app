@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from 'react-native'
-import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
+// import { AntDesign } from '@expo/vector-icons';
+// import { Feather } from '@expo/vector-icons';
+// import { Octicons } from '@expo/vector-icons';
 
 export default function Login({ navigation }) {
 
@@ -14,7 +14,7 @@ export default function Login({ navigation }) {
         <View style={styles.container}>
             <Text style={styles.head}>Log in</Text>
             <View style={styles.inputbox}>
-                <AntDesign name="user" size={24} color={emailfocus===true?"red":"black"} />
+                {/* <AntDesign name="user" size={24} color={emailfocus===true?"red":"black"} /> */}
                 <TextInput style={styles.input} placeholder='Email' 
                     onFocus={()=>{
                         setEmailFocus(true)
@@ -24,7 +24,7 @@ export default function Login({ navigation }) {
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
-                <Feather name="lock" size={24} color={passwordfocus===true?"red":"black"} />
+                {/* <Feather name="lock" size={24} color={passwordfocus===true?"red":"black"} /> */}
                 <TextInput style={styles.input} placeholder='Password'
                 onFocus={()=>{
                     setEmailFocus(false)
@@ -32,10 +32,10 @@ export default function Login({ navigation }) {
                 }}
                 secureTextEntry={showpassword==false?true:false}
                 ></TextInput>
-                <Octicons name={showpassword==false?"eye-closed":"eye"} size={24} 
+                {/* <Octicons name={showpassword==false?"eye-closed":"eye"} size={24} 
                 onPress={()=>{
                     setShowPassword(!showpassword)
-                }}></Octicons>
+                }}></Octicons> */}
             </View>
 
             <TouchableOpacity  style={styles.btn} onPress={()=>navigation.navigate('Home')}>
