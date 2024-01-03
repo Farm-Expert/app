@@ -46,7 +46,7 @@ export default function Home({ navigation }) {
         </ScrollView>
       </View>
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
-      <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">scroll -></Text></View>
+      <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">{"scroll ->"}</Text></View>
 
       <View><Text className="text-white text-2xl font-bold">Features</Text></View>
       <View className="w-screen flex items-center justify-center">
@@ -94,7 +94,7 @@ export default function Home({ navigation }) {
       </ScrollView>
       </View>
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
-      <View className="w-full"><Text className="text-left text-slate-300 font-bold">scroll -></Text></View>
+      <View className="w-full"><Text className="text-left text-slate-300 font-bold">{"scroll ->"}</Text></View>
 
       {/* nav */}
       {/* <View style={{ width: "100%" }} className="absolute bottom-12">
