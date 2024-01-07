@@ -1,20 +1,33 @@
 import React, { useState } from 'react'
-import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity } from 'react-native'
-// import { AntDesign } from '@expo/vector-icons';
-// import { Feather } from '@expo/vector-icons';
-// import { Octicons } from '@expo/vector-icons';
+import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native'
+import { AntDesign } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
+import * as Speech from 'expo-speech';
 
 export default function Login({ navigation }) {
 
     const [emailfocus, setEmailFocus]=useState(false);
     const [passwordfocus, setPassordFocus]=useState(false);
     const [showpassword, setShowPassword]=useState(false);
+    function showToast() {
+        ToastAndroid.show('Request sent successfully!', ToastAndroid.SHORT);
+    }
 
     return (
         <View style={styles.container}>
-            <Text style={styles.head}>Log in</Text>
+            <StatusBar backgroundColor='transparent'
+                barStyle='light-content'
+                color='white'
+                hidden={false}
+                translucent={true}
+                networkActivityIndicatorVisible={true}
+                showHideTransition='slide'
+            />
+            <Image source={require("../assets/farming.png")} style={{width:"100%",height:"20%",marginTop:50}}/>
+            <Text className="font-bold" style={styles.head}>Log in</Text>
             <View style={styles.inputbox}>
-                {/* <AntDesign name="user" size={24} color={emailfocus===true?"red":"black"} /> */}
+                <AntDesign name="user" size={24} color={emailfocus===true?"red":"black"} />
                 <TextInput style={styles.input} placeholder='Email' 
                     onFocus={()=>{
                         setEmailFocus(true)
@@ -24,7 +37,7 @@ export default function Login({ navigation }) {
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
-                {/* <Feather name="lock" size={24} color={passwordfocus===true?"red":"black"} /> */}
+                <Feather name="lock" size={24} color={passwordfocus===true?"red":"black"} />
                 <TextInput style={styles.input} placeholder='Password'
                 onFocus={()=>{
                     setEmailFocus(false)
@@ -32,10 +45,10 @@ export default function Login({ navigation }) {
                 }}
                 secureTextEntry={showpassword==false?true:false}
                 ></TextInput>
-                {/* <Octicons name={showpassword==false?"eye-closed":"eye"} size={24} 
+                <Octicons name={showpassword==false?"eye-closed":"eye"} size={24} 
                 onPress={()=>{
                     setShowPassword(!showpassword)
-                }}></Octicons> */}
+                }}></Octicons>
             </View>
 
             <TouchableOpacity  style={styles.btn} onPress={()=>navigation.navigate('Home')}>
@@ -45,8 +58,9 @@ export default function Login({ navigation }) {
             <Text style={{color:"grey"}}>Forgot Password </Text>
             <View className="flex w-screen flex-row items-center justify-center m-0 p-1">
                 <Text style={{color:"#E9A11A", marginTop:10}}>New here?</Text>
-                <Text style={{color:"black", marginTop:10}} onPress={()=>navigation.navigate('Signup')}> Sign up</Text>
+                <Text className="font-bold" style={{color:"black", marginTop:10}} onPress={()=>showToast()}> Sign up</Text>
             </View>
+            <Image className="absolute bottom-0 -z-30 opacity-10" source={require("../assets/farmbg.png")} style={{width:"100%",height:"50%"}}/>
 
         </View>
     )
@@ -59,10 +73,10 @@ const styles = StyleSheet.create({
         backgroundColor:"white",
         width: "100%",
         alignItems: "center",
-        justifyContent: "center",
+        // justifyContent: "center",
     },
     head: {
-        fontSize: 25,
+        fontSize: 30,
         color: "#E9A11A",
         textAlign: "center",
         marginVertical: 40,

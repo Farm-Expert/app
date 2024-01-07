@@ -6,6 +6,10 @@ import home from "../assets/home.png"
 import bgImage from "../assets/bg4.jpg"
 import back from "../assets/back.png"
 import CropScroll from './comp/CropScroll';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function Profile({ navigation }) {
     return (
@@ -31,23 +35,35 @@ export default function Profile({ navigation }) {
             <View style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50, backgroundColor: "#ffffff60" }} className="flex justify-start items-center w-screen h-full">
                 <View className="w-full flex flex-row mb-6 mt-6 justify-around items-center">
                     <View>
-                        <Text className="text-center text-xl font-bold">Email</Text>
+                        <View className="flex flex-row items-center justify-center gap-1">
+                            <MaterialIcons name="email" size={24} color="black" />
+                            <Text className="text-center text-xl font-bold">Email</Text>
+                        </View>
                         <Text className="text-center">xyz@gmail.com</Text>
                     </View>
                     <View>
-                        <Text className="text-center text-xl font-bold">Mobile No.</Text>
+                        <View className="flex flex-row items-center justify-center gap-1">
+                            <Entypo name="phone" size={24} color="black" />
+                            <Text className="text-center text-xl font-bold">Mobile No.</Text>
+                        </View>
                         <Text className="text-center">+91 7392849387</Text>
                     </View>
                 </View>
                 <View className="w-full flex flex-row mb-6 justify-around items-center">
                     <View>
-                        <Text className="text-center text-xl font-bold">PM-Kisan farmer ID</Text>
+                        <View className="flex flex-row items-center justify-center gap-1">
+                            <AntDesign name="idcard" size={24} color="black" />
+                            <Text className="text-center text-xl font-bold">PM-Kisan farmer ID</Text>
+                        </View>
                         <Text className="text-center">DL938475LC384P</Text>
                     </View>
                 </View>
                 <View className="w-full flex flex-row mb-6 justify-around items-center">
                     <View className="flex justify-center items-center">
-                        <Text className="text-center text-xl font-bold">Address</Text>
+                        <View className="flex flex-row items-center justify-center gap-1">
+                            <FontAwesome name="address-book" size={24} color="black" />
+                            <Text className="text-center text-xl font-bold">Address</Text>
+                        </View>
                         <Text className="text-center flex flex-wrap w-2/3">Ram vilas, Hno. 102, Solar Colony Faridabad, Haryana</Text>
                     </View>
                 </View>
@@ -55,26 +71,41 @@ export default function Profile({ navigation }) {
 
                 <View style={{ width: "90%" }} className="">
                     <View className="h-16 rounded-full mb-6 mt-7 overflow-hidden flex flex-row justify-around items-center w-full bg-green-100">
-                        <View className="flex items-center justify-center flex-1"><TouchableOpacity className="w-full h-full flex items-center justify-center"><Text className="font-bold">Edit</Text></TouchableOpacity></View>
+                        <View className="flex items-center justify-center flex-1">
+                            <TouchableOpacity className="w-full h-full flex items-center justify-center">
+                                <AntDesign name="edit" size={24} color="black" />
+                                <Text className="font-bold">Edit</Text>
+                            </TouchableOpacity>
+                        </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
-                        <View className="flex items-center justify-center flex-1"><TouchableOpacity className="w-full h-full flex items-center justify-center"><Text className="font-bold">Share</Text></TouchableOpacity></View>
+                        <View className="flex items-center justify-center flex-1">
+                            <TouchableOpacity className="w-full h-full flex items-center justify-center">
+                                <AntDesign name="sharealt" size={24} color="black" />
+                                <Text className="font-bold">Share</Text>
+                            </TouchableOpacity>
+                        </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
-                        <View className="flex items-center justify-center flex-1"><TouchableOpacity className="w-full h-full flex items-center justify-center"><Text className="font-bold">Log out</Text></TouchableOpacity></View>
+                        <View className="flex items-center justify-center flex-1">
+                            <TouchableOpacity onPress={() => navigation.navigate('Login')} className="w-full h-full flex items-center justify-center">
+                                <MaterialIcons name="logout" size={24} color="black" />
+                                <Text className="font-bold">Log out</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
                 </View>
                 <View>
                     <Text className="font-bold text-lg text-white">Your Current Soil Condition</Text>
                 </View>
                 <View style={{ height: 2 }} className="w-2/3 bg-white"></View>
-                <View className="p-5" style={{height:150}}>
+                <View className="p-5" style={{ height: 150 }}>
                     <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
-                        <CropScroll name={"Nitrogen"} value={122}/>
-                        <CropScroll name={"PH"} value={122}/>
-                        <CropScroll name={"Temperature"} value={122}/>
-                        <CropScroll name={"Phosphorus"} value={122}/>
-                        <CropScroll name={"Rainfall"} value={122}/>
-                        <CropScroll name={"Potassium"} value={122}/>
-                        <CropScroll name={"Humidity"} value={122}/>
+                        <CropScroll name={"Nitrogen"} value={122} />
+                        <CropScroll name={"PH"} value={122} />
+                        <CropScroll name={"Temperature"} value={122} />
+                        <CropScroll name={"Phosphorus"} value={122} />
+                        <CropScroll name={"Rainfall"} value={122} />
+                        <CropScroll name={"Potassium"} value={122} />
+                        <CropScroll name={"Humidity"} value={122} />
                     </ScrollView>
                 </View>
             </View>

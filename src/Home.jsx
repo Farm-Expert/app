@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import bgImage from "../assets/bg2.jpg"
 import avatar from "../assets/avatar.png"
@@ -8,8 +8,18 @@ import crop from "../assets/crop.jpg"
 import profile from "../assets/profile.png"
 import home from "../assets/home.png"
 import Scroll from './comp/Scroll';
+import * as Speech from 'expo-speech';
 
 export default function Home({ navigation }) {
+  const [text, setText] = useState('welcome to happy farming');
+  const handleSpeak = async () => {
+    if (text.trim() !== '') {
+      Speech.speak(text, { language: 'hin' });
+    }
+  };
+  useEffect(() => {
+    handleSpeak();
+  }, [])
   return (
     <ImageBackground
       source={bgImage}
