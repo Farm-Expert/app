@@ -11,7 +11,7 @@ import Scroll from './comp/Scroll';
 import * as Speech from 'expo-speech';
 
 export default function Home({ navigation }) {
-  const [text, setText] = useState('welcome to happy farming');
+  const [text, setText] = useState('farm expert me aapka swagat hai');
   const handleSpeak = async () => {
     if (text.trim() !== '') {
       Speech.speak(text, { language: 'hin' });
