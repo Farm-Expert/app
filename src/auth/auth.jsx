@@ -9,6 +9,6 @@ export const signup=async ({name,email,mobile,password,address,kisanid})=>{
 }
 
 export const login=async ({email,password})=>{
-    const data=await axios.post(API+'auth/signup',{email,password});
+    const data=await axios.post(API+'auth/login',{email,password});
     console.log(data.data);
 }
