@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { signup } from './auth/auth';
+import { Alert } from 'react-native';
 
 export default function Signup({ navigation }) {
 
@@ -13,6 +14,8 @@ export default function Signup({ navigation }) {
     const [showpassword, setShowPassword] = useState(false);
     const [userfocus, setUserFocus] = useState(false);
     const [phonefocus, setPhoneFocus] = useState(false);
+    const [adressfocus, setAddressFocus] = useState(false);
+    const [kisanidfocus, setKisanIdFocus]= useState(false)
     const [Name,setName]=useState("");
     const [Email,setEmail]=useState("");
     const [Mobile,setMobile]=useState("");
@@ -21,7 +24,13 @@ export default function Signup({ navigation }) {
     const [KisanID,setKisanID]=useState("");
 
     const handlesignup=async()=>{
-        const data=await signup(Name,Email)
+        const data=await signup(Name,Email,Mobile,Password,Address,KisanID)
+        if(data){
+            navigation.navigate("Home")
+        }
+        else{
+            Alert.alert("Authentication Failed")
+        }
     }
 
     return (
@@ -31,12 +40,16 @@ export default function Signup({ navigation }) {
             <View style={styles.inputbox}>
                 <AntDesign name="user" size={24} color={userfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='User Name'
+                value={Name}
+                onChange={(e)=>setName(e)}
                     onFocus={() => {
                         setUserFocus(true)
                         setEmailFocus(false)
                         setPhoneFocus(false)
                         setPassordFocus(false)
                         setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                 ></TextInput>
             </View>
@@ -51,31 +64,73 @@ export default function Signup({ navigation }) {
                         setPhoneFocus(false)
                         setPassordFocus(false)
                         setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                     keyboardType="email-address"
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
+                <MaterialCommunityIcons name="kisan-id" size={24} color={kisanidfocus === true ? "red" : "black"} />
+                <TextInput style={styles.input} placeholder='KisanID'
+                    value={KisanID}
+                    onChange={(e)=>setKisanID(e)}
+                    onFocus={() => {
+                        setUserFocus(false)
+                        setEmailFocus(false)
+                        setPhoneFocus(false)
+                        setPassordFocus(false)
+                        setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(true)
+                    }}
+                ></TextInput>
+            </View>
+            <View style={styles.inputbox}>
                 <Feather name="phone-call" size={24} color={phonefocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='Phone Number'
+                value={Mobile}
+                onChange={(e)=>setMobile(e)}
                     onFocus={() => {
                         setUserFocus(false)
                         setEmailFocus(false)
                         setPhoneFocus(true)
                         setPassordFocus(false)
                         setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                     keyboardType="number-pad"
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
+                <MaterialCommunityIcons name="address" size={24} color={adressfocus === true ? "red" : "black"} />
+                <TextInput style={styles.input} placeholder='Address'
+                    value={Address}
+                    onChange={(e)=>setAddress(e)}
+                    onFocus={() => {
+                        setUserFocus(false)
+                        setEmailFocus(false)
+                        setPhoneFocus(false)
+                        setPassordFocus(false)
+                        setShowPassword(false)
+                        setAddressFocus(true)
+                        setKisanIdFocus(false)
+                    }}
+                ></TextInput>
+            </View>
+            <View style={styles.inputbox}>
                 <Feather name="lock" size={24} color={passwordfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='Password'
+                value={Password}
+                onChange={(e)=>setPassword(e)}
                     onFocus={() => {
                         setUserFocus(false)
                         setEmailFocus(false)
                         setPhoneFocus(false)
                         setPassordFocus(true)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                     keyboardType="visible-password"
                     secureTextEntry={showpassword == false ? true : false}
@@ -87,7 +142,8 @@ export default function Signup({ navigation }) {
             </View>
 
             <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Home')}>
-                <Text className="font-bold" style={{ color: "white", fontSize: 18 }}>Log in</Text>
+                <Text className="font-bold" style={{ color: "white", fontSize: 18 }} 
+                onClick={handlesignup}>Log in</Text>
             </TouchableOpacity>
 
             <Text style={{ color: "grey" }}>Forgot Password </Text>
