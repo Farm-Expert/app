@@ -46,7 +46,7 @@ export default function Home({ navigation }) {
         </ScrollView>
       </View>
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
-      <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">scroll -></Text></View>
+      <View className="w-full"><Text className="text-left text-slate-300 font-bold mb-10">scroll --</Text></View>
 
       <View className="flex w-screen p-4 pt-7 h-full flex-row items-start justify-center gap-2">
         <TouchableOpacity style={{elevation:90}} onPress={()=>navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
