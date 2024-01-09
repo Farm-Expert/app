@@ -4,6 +4,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { signup } from './auth/auth';
 
 export default function Signup({ navigation }) {
 
@@ -12,6 +13,16 @@ export default function Signup({ navigation }) {
     const [showpassword, setShowPassword] = useState(false);
     const [userfocus, setUserFocus] = useState(false);
     const [phonefocus, setPhoneFocus] = useState(false);
+    const [Name,setName]=useState("");
+    const [Email,setEmail]=useState("");
+    const [Mobile,setMobile]=useState("");
+    const [Password,setPassword]=useState("");
+    const [Address,setAddress]=useState("");
+    const [KisanID,setKisanID]=useState("");
+
+    const handlesignup=async()=>{
+        const data=await signup(Name,Email)
+    }
 
     return (
         <View style={styles.container}>
@@ -32,6 +43,8 @@ export default function Signup({ navigation }) {
             <View style={styles.inputbox}>
                 <MaterialCommunityIcons name="email-outline" size={24} color={emailfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='Email'
+                    value={Email}
+                    onChange={(e)=>setEmail(e)}
                     onFocus={() => {
                         setUserFocus(false)
                         setEmailFocus(true)
