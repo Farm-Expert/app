@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar, ScrollView, Alert } from 'react-native';
 import profile from "../assets/profile.png"
 import avatar from "../assets/avatar.png"
 import home from "../assets/home.png"
@@ -10,8 +10,52 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { storage } from './firebase/firebaseconfig'
+import { addDoc, collection } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
+import * as ImagePicker from 'expo-image-picker';
+import { FontAwesome5 } from '@expo/vector-icons';
 
 export default function Profile({ navigation }) {
+
+    const [imgsrc, setImgSrc] = useState("https://firebasestorage.googleapis.com/v0/b/farm-expert-d17fd.appspot.com/o/images%2F1704810236599.jpg?alt=media&token=51cfebcb-94ef-411a-a204-905693f90847");
+
+    useEffect(() => {
+        (async () => {
+            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (status !== 'granted') {
+                console.error('Permission to access media library denied');
+            }
+        })();
+    }, []);
+
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            allowsEditing: true,
+            aspect: [4, 4],
+            quality: 1,
+        });
+        if (!result.canceled) {
+            console.log(result.assets[0].uri);
+            const response = await fetch(result.assets[0].uri);
+            const blob = await response.blob();
+            const storageRef = ref(storage, (`images/${Date.now()}.png`));
+            try {
+                uploadBytes(storageRef, blob).then(() => {
+                    Alert.alert('Image uploaded successfully!')
+                    getDownloadURL(storageRef).then((url) => {
+                        setImgSrc(url);
+                        console.log(url);
+                    })
+                })
+            } catch (error) {
+                console.error('Error uploading image:', error.message);
+            }
+        }
+    };
+
+
     return (
         <ImageBackground
             source={bgImage}
@@ -28,8 +72,9 @@ export default function Profile({ navigation }) {
             <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-10">
                 <Image source={back} style={{ width: 20, height: 20 }} />
             </TouchableOpacity>
-            <View className="bg-transparent rounded-full mb-4" style={{ width: 110, height: 110 }}>
-                <Image source={avatar} className="w-full h-full" />
+            <TouchableOpacity onPress={pickImage} className="absolute z-40 top-12 right-10"><FontAwesome5 name="user-edit" size={24} color="white" /></TouchableOpacity>
+            <View className="bg-transparent rounded-full mb-4 overflow-hidden" style={{ width: 110, height: 110 }}>
+                <Image source={{ uri: imgsrc }} className="w-full h-full" />
             </View>
             <Text className="mb-4 font-extrabold text-white text-lg">Hi Adam</Text>
             <View style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50, backgroundColor: "#ffffff60" }} className="flex justify-start items-center w-screen h-full">

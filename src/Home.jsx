@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import bgImage from "../assets/bg2.jpg"
 import avatar from "../assets/avatar.png"
 import search from "../assets/seach.png"

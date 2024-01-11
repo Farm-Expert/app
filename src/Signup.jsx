@@ -31,6 +31,8 @@ export default function Signup({ navigation }) {
             <View style={styles.inputbox}>
                 <AntDesign name="user" size={24} color={userfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='User Name'
+                    value={Name}
+                    onChange={(e)=>setName(e)}
                     onFocus={() => {
                         setUserFocus(true)
                         setEmailFocus(false)
