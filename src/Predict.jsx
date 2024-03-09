@@ -18,7 +18,6 @@ export default function Predict() {
           <Image source={crop} className="rounded-2xl h-full w-full m-1 p-0" style={{ width: 55, height: 55 }} />
         </View>
       </View>
-
       <View className="w-full flex flex-row items-left justify-between m-6">
         <Text className="text-white font-bold text-3xl text-left">Rice</Text>
         <Text className="text-white font-bold text-2xl text-left">$120</Text>
@@ -39,8 +38,8 @@ export default function Predict() {
       <View className="w-full flex flex-column items-left justify-around m-4">
         <Text className="text-white font-bold text-2xl text-left pb-3">How to grow Rice?</Text>
         <ScrollView vertical={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
-        <Text className="text-slate-300 font-bold text-xl text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolore, nihil maiores dignissimos est, excepturi voluptatum voluptatibus repudiandae quibusdam, cum magnam esse illum. Repudiandae quaerat, repellendus molestias consectetur nisi tempora!</Text>
-        </ScrollView>      
+          <Text className="text-slate-300 font-bold text-xl text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolore, nihil maiores dignissimos est, excepturi voluptatum voluptatibus repudiandae quibusdam, cum magnam esse illum. Repudiandae quaerat, repellendus molestias consectetur nisi tempora!</Text>
+        </ScrollView>
       </View>
 
     </ImageBackground>
