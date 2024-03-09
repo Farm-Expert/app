@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { signup } from './auth/auth';
+import { Alert } from 'react-native';
 
 export default function Signup({ navigation }) {
 
@@ -13,6 +14,8 @@ export default function Signup({ navigation }) {
     const [showpassword, setShowPassword] = useState(false);
     const [userfocus, setUserFocus] = useState(false);
     const [phonefocus, setPhoneFocus] = useState(false);
+    const [adressfocus, setAddressFocus] = useState(false);
+    const [kisanidfocus, setKisanIdFocus]= useState(false)
     const [Name,setName]=useState("");
     const [Email,setEmail]=useState("");
     const [Mobile,setMobile]=useState("");
@@ -21,7 +24,16 @@ export default function Signup({ navigation }) {
     const [KisanID,setKisanID]=useState("");
 
     const handlesignup=async()=>{
-        const data=await signup(Name,Email)
+        console.log(Name,Email,Mobile,Password,Address,KisanID);
+        const data=await signup(Name,Email,Mobile,Password,Address,KisanID)
+        console.log("data",data);
+        if(data){
+            console.log("data",data);
+            navigation.navigate("Home")
+        }
+        else{
+            Alert.alert("Authentication Failed")
+        }
     }
 
     return (
@@ -31,14 +43,16 @@ export default function Signup({ navigation }) {
             <View style={styles.inputbox}>
                 <AntDesign name="user" size={24} color={userfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='User Name'
-                    value={Name}
-                    onChange={(e)=>setName(e)}
+                value={Name}
+                onChangeText={(e)=>setName(e)}
                     onFocus={() => {
                         setUserFocus(true)
                         setEmailFocus(false)
                         setPhoneFocus(false)
                         setPassordFocus(false)
                         setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                 ></TextInput>
             </View>
@@ -46,38 +60,80 @@ export default function Signup({ navigation }) {
                 <MaterialCommunityIcons name="email-outline" size={24} color={emailfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='Email'
                     value={Email}
-                    onChange={(e)=>setEmail(e)}
+                    onChangeText={(e)=>setEmail(e)}
                     onFocus={() => {
                         setUserFocus(false)
                         setEmailFocus(true)
                         setPhoneFocus(false)
                         setPassordFocus(false)
                         setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                     keyboardType="email-address"
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
+                <MaterialCommunityIcons name="kisan-id" size={24} color={kisanidfocus === true ? "red" : "black"} />
+                <TextInput style={styles.input} placeholder='KisanID'
+                    value={KisanID}
+                    onChangeText={(e)=>setKisanID(e)}
+                    onFocus={() => {
+                        setUserFocus(false)
+                        setEmailFocus(false)
+                        setPhoneFocus(false)
+                        setPassordFocus(false)
+                        setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(true)
+                    }}
+                ></TextInput>
+            </View>
+            <View style={styles.inputbox}>
                 <Feather name="phone-call" size={24} color={phonefocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='Phone Number'
+                value={Mobile}
+                onChangeText={(e)=>setMobile(e)}
                     onFocus={() => {
                         setUserFocus(false)
                         setEmailFocus(false)
                         setPhoneFocus(true)
                         setPassordFocus(false)
                         setShowPassword(false)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                     keyboardType="number-pad"
                 ></TextInput>
             </View>
             <View style={styles.inputbox}>
+                <MaterialCommunityIcons name="address" size={24} color={adressfocus === true ? "red" : "black"} />
+                <TextInput style={styles.input} placeholder='Address'
+                    value={Address}
+                    onChangeText={(e)=>setAddress(e)}
+                    onFocus={() => {
+                        setUserFocus(false)
+                        setEmailFocus(false)
+                        setPhoneFocus(false)
+                        setPassordFocus(false)
+                        setShowPassword(false)
+                        setAddressFocus(true)
+                        setKisanIdFocus(false)
+                    }}
+                ></TextInput>
+            </View>
+            <View style={styles.inputbox}>
                 <Feather name="lock" size={24} color={passwordfocus === true ? "red" : "black"} />
                 <TextInput style={styles.input} placeholder='Password'
+                value={Password}
+                onChangeText={(e)=>setPassword(e)}
                     onFocus={() => {
                         setUserFocus(false)
                         setEmailFocus(false)
                         setPhoneFocus(false)
                         setPassordFocus(true)
+                        setAddressFocus(false)
+                        setKisanIdFocus(false)
                     }}
                     keyboardType="visible-password"
                     secureTextEntry={showpassword == false ? true : false}
@@ -88,8 +144,10 @@ export default function Signup({ navigation }) {
                     }}></Octicons>
             </View>
 
-            <TouchableOpacity style={styles.btn} onPress={() => navigation.navigate('Home')}>
-                <Text className="font-bold" style={{ color: "white", fontSize: 18 }}>Log in</Text>
+            <TouchableOpacity style={styles.btn} onPress={handlesignup}>
+                <Text className="font-bold" style={{ color: "white", fontSize: 18 }} >
+                    Sign up
+                </Text>
             </TouchableOpacity>
 
             <Text style={{ color: "grey" }}>Forgot Password </Text>
@@ -115,7 +173,7 @@ const styles = StyleSheet.create({
         fontSize: 30,
         color: "#E9A11A",
         textAlign: "center",
-        marginVertical: 40,
+        // marginVertical: 0,
         marginTop: 20
     },
     inputbox: {

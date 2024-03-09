@@ -9,7 +9,7 @@ import profile from "../assets/profile.png"
 import home from "../assets/home.png"
 import Scroll from './comp/Scroll';
 import * as Speech from 'expo-speech';
-
+import { recentCrop } from './auth/recent';
 export default function Home({ navigation }) {
   const [text, setText] = useState('farm expert me aapka swagat hai');
   const handleSpeak = async () => {
@@ -20,6 +20,17 @@ export default function Home({ navigation }) {
   useEffect(() => {
     handleSpeak();
   }, [])
+
+  const handlesearch = async () => {
+    const data = await recentCrop()
+    if (data) {
+      navigation.navigate("Home")
+    }
+    else {
+      Alert.alert("Failed")
+    }
+  }
+
   return (
     <ImageBackground
       source={bgImage}
@@ -33,7 +44,9 @@ export default function Home({ navigation }) {
         networkActivityIndicatorVisible={true}
         showHideTransition='slide'
       />
-      <View className="flex w-full flex-row items-center justify-between">
+
+      {/* handle search yaha daala h jisse jaise hi home aae search update ho jae */}
+      <View className="flex w-full flex-row items-center justify-between" onChange={handlesearch}>
         <View>
           <Text className="text-slate-300 font-bold text-xl text-left">Hi There !!</Text>
           <Text className="text-white font-bold text-2xl text-left">Happy Farming</Text>
@@ -42,7 +55,8 @@ export default function Home({ navigation }) {
       </View>
       <View className="rounded-3xl flex gap-2 flex-row items-center justify-center mt-12" style={styles.input}>
         <Image source={search} style={{ width: 30, height: 30 }} />
-        <TextInput className="font-bold mb-2 text-lg" style={{ width: "80%" }} placeholder="Search crop name...." />
+        <TextInput className="font-bold mb-2 text-lg" style={{ width: "80%" }} placeholder="Search crop name...." 
+        />
       </View>
 
       {/* suggested crops */}
