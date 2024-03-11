@@ -1,28 +1,31 @@
 import React from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
 import bgimage from '../assets/bg.webp';
-import crop from '../assets/rice.jpg';
 import CropScroll from './comp/CropScroll';
+import back from "../assets/back.png"
 
-export default function Predict() {
+export default function Predict({navigation, route}) {
+  const { crop } = route.params;
   return (
     <ImageBackground
       source={bgimage}
       style={styles.backgroundImage}
     >
-      <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
-        <Image source={crop} className="rounded-b-3xl h-full w-full m-0 p-0" style={styles.cropimg} />
-        <View className="flex w-3/5 flex-row items-center justify-evenly m-0 p-2 rounded-2xl bottom-10" style={styles.rec}>
-          <Image source={crop} className="rounded-2xl h-full w-full m-1 p-0" style={{ width: 55, height: 55 }} />
-          <Image source={crop} className="rounded-2xl h-full w-full m-1 p-0" style={{ width: 55, height: 55 }} />
-          <Image source={crop} className="rounded-2xl h-full w-full m-1 p-0" style={{ width: 55, height: 55 }} />
+      <StatusBar barStyle="light-content" backgroundColor="#ffffff30" />
+      <View className="flex w-screen items-center justify-center flex-row top-0 m-0 p-0">
+        <View className="w-screen items-center top-0 justify-center rounded-lg overflow-hidden">
+          <Image source={{uri:crop.img}} className="rounded-b-3xl h-full w-full m-0 p-0" style={styles.cropimg} />
+        </View>
+        <View className="flex w-3/5 flex-row items-center justify-evenly m-0 p-2 rounded-2xl" style={styles.rec}>
+          <Image source={{uri:crop.img}} className="rounded-2xl h-full w-full p-0" style={{ width: 55, height: 55 }} />
+          <Image source={{uri:crop.img}} className="rounded-2xl h-full w-full p-0" style={{ width: 55, height: 55 }} />
+          <Image source={{uri:crop.img}} className="rounded-2xl h-full w-full p-0" style={{ width: 55, height: 55 }} />
         </View>
       </View>
-      <View className="w-full flex flex-row items-left justify-between m-6">
-        <Text className="text-white font-bold text-3xl text-left">Rice</Text>
-        <Text className="text-white font-bold text-2xl text-left">$120</Text>
-      </View>
-
+      <Text className="text-white w-full -mt-5 font-bold text-center text-3xl">{crop.name}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-12">
+                <Image source={back} style={{ width: 20, height: 20 }} />
+      </TouchableOpacity>
       <View className="p-5 w-screen" style={{ height: 150 }}>
         <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
           <CropScroll name={"Nitrogen"} value={122} />
@@ -35,10 +38,10 @@ export default function Predict() {
         </ScrollView>
       </View>
 
-      <View className="w-full flex flex-column items-left justify-around m-4">
-        <Text className="text-white font-bold text-2xl text-left pb-3">How to grow Rice?</Text>
-        <ScrollView vertical={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
-          <Text className="text-slate-300 font-bold text-xl text-left">Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium dolore, nihil maiores dignissimos est, excepturi voluptatum voluptatibus repudiandae quibusdam, cum magnam esse illum. Repudiandae quaerat, repellendus molestias consectetur nisi tempora!</Text>
+      <View style={{backgroundColor:"#00000080"}} className="w-screen p-4 rounded-tl-3xl rounded-tr-3xl flex-1 flex flex-column items-left justify-around">
+        <Text className="text-white font-extrabold text-2xl text-center pb-3">How to grow {crop.name}?</Text>
+        <ScrollView showsVerticalScrollIndicator={false} vertical={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
+          <Text className="text-slate-300 font-bold pl-3 pr-3 text-xl text-left">{crop.desc}</Text>
         </ScrollView>
       </View>
 
@@ -50,14 +53,18 @@ const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
     resizeMode: 'cover',
-    padding: 30,
+    paddingHorizontal: 30,
     alignItems: "center"
   },
   cropimg: {
-    height: 380,
-    resizeMode: "contain"
+    height: 300,
+    width: "100%",
+    marginBottom: 30,
+    borderRadius: 20,
+    // resizeMode: "contain"
   },
   rec: {
+    bottom:50,
     height: 80,
     backgroundColor: "#F3EEEAA0",
     position: "absolute",

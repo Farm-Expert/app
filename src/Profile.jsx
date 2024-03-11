@@ -8,6 +8,7 @@ import back from "../assets/back.png"
 import CropScroll from './comp/CropScroll';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import * as Clipboard from 'expo-clipboard';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { storage } from './firebase/firebaseconfig'
@@ -15,6 +16,7 @@ import { addDoc, collection } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
+import { useSelector } from 'react-redux';
 
 export default function Profile({ navigation }) {
 
@@ -55,6 +57,15 @@ export default function Profile({ navigation }) {
         }
     };
 
+    const user_data=useSelector(state => state.value)
+
+    const share=()=>{
+        console.log("share")
+        const profile_link=`http://myfarmexpert.tech:5050/share/${user_data.payload.token}`
+        console.log(profile_link);
+        console.log(user_data.payload.user);
+        Clipboard.setString(profile_link);
+    }
 
     return (
         <ImageBackground
@@ -76,7 +87,7 @@ export default function Profile({ navigation }) {
             <View className="bg-transparent rounded-full mb-4 overflow-hidden" style={{ width: 110, height: 110 }}>
                 <Image source={{ uri: imgsrc }} className="w-full h-full" />
             </View>
-            <Text className="mb-4 font-extrabold text-white text-lg">Hi Adam</Text>
+            <Text className="mb-4 font-extrabold text-white text-lg">Hi {user_data.payload.user.name}</Text>
             <View style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50, backgroundColor: "#ffffff60" }} className="flex justify-start items-center w-screen h-full">
                 <View className="w-full flex flex-row mb-6 mt-6 justify-around items-center">
                     <View>
@@ -84,14 +95,14 @@ export default function Profile({ navigation }) {
                             <MaterialIcons name="email" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Email</Text>
                         </View>
-                        <Text className="text-center">xyz@gmail.com</Text>
+                        <Text className="text-center">{user_data.payload.user.email}</Text>
                     </View>
                     <View>
                         <View className="flex flex-row items-center justify-center gap-1">
                             <Entypo name="phone" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Mobile No.</Text>
                         </View>
-                        <Text className="text-center">+91 7392849387</Text>
+                        <Text className="text-center">+91 {user_data.payload.user.mobile}</Text>
                     </View>
                 </View>
                 <View className="w-full flex flex-row mb-6 justify-around items-center">
@@ -100,7 +111,7 @@ export default function Profile({ navigation }) {
                             <AntDesign name="idcard" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">PM-Kisan farmer ID</Text>
                         </View>
-                        <Text className="text-center">DL938475LC384P</Text>
+                        <Text className="text-center">{user_data.payload.user.kisanid}</Text>
                     </View>
                 </View>
                 <View className="w-full flex flex-row mb-6 justify-around items-center">
@@ -109,7 +120,7 @@ export default function Profile({ navigation }) {
                             <FontAwesome name="address-book" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Address</Text>
                         </View>
-                        <Text className="text-center flex flex-wrap w-2/3">Ram vilas, Hno. 102, Solar Colony Faridabad, Haryana</Text>
+                        <Text className="text-center flex flex-wrap w-2/3">{user_data.payload.user.address}</Text>
                     </View>
                 </View>
                 <View style={{ height: 2 }} className="w-2/3 bg-white"></View>
@@ -124,7 +135,7 @@ export default function Profile({ navigation }) {
                         </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
                         <View className="flex items-center justify-center flex-1">
-                            <TouchableOpacity className="w-full h-full flex items-center justify-center">
+                            <TouchableOpacity className="w-full h-full flex items-center justify-center" onPress={share}>
                                 <AntDesign name="sharealt" size={24} color="black" />
                                 <Text className="font-bold">Share</Text>
                             </TouchableOpacity>

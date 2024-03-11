@@ -1,22 +1,35 @@
 import axios from "axios";
+import { Alert } from "react-native";
 
-const API = "https://farm-expert-app-backend-beige.vercel.app/"
+const API="http://myfarmexpert.tech:5050/"
 
 
 export const signup = async (name, email, mobile, password, address, kisanid ) => {
-    console.log("inside API");
-    console.log(name, email, mobile, password, address, kisanid);
     try {
         const data = await axios.post(API+'auth/signup', { name, email, mobile, password, address, kisanid });
-        console.log(data);
-        if (data.data) console.log(data.data);
+        if (data.data){
+            return data.data;
+        }
+        else{
+            return null
+        }
     } catch (error) {
         console.log(error);
     }
 
 }
 
-export const login = async ({ email, password }) => {
-    const data = await axios.post(API + 'auth/login', { email, password });
-    console.log(data.data);
+export const login = async (email, password) => {
+    
+    try {
+        const data = await axios.post(API + 'auth/login', { email, password });
+        if (data.data){
+            return data.data;
+        } 
+        else{
+            return null
+        }
+    } catch (error) {
+        console.log(error);
+    }
 }

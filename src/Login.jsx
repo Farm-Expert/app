@@ -6,6 +6,8 @@ import { Octicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { login } from './auth/auth';
 import { Alert } from 'react-native';
+import { add } from '../redux/Auth';
+import { useDispatch } from 'react-redux';
 
 export default function Login({ navigation }) {
 
@@ -14,17 +16,27 @@ export default function Login({ navigation }) {
     const [showpassword, setShowPassword]=useState(false);
     const [ Email, setEmail] = useState("")
     const [Password, setPassword]= useState("")
-    function showToast() {
-        ToastAndroid.show('Request sent successfully!', ToastAndroid.SHORT);
+    function showToast(message) {
+        ToastAndroid.show(message, ToastAndroid.SHORT);
     }
 
+    const dispatch=useDispatch();
+
     const handlelogin=async()=>{
+        if(Email=="" || Password==""){
+            showToast("Please fill all the fields")
+            return;
+        }
         const data=await login(Email,Password)
-        if(data){
+        if(data!=null && data.token){
+            dispatch(add(data));
+            setEmail("");
+            setPassword("");
+            showToast("Logged in successfully!");
             navigation.navigate("Home")
         }
         else{
-            Alert.alert("Authentication Failed")
+            showToast(`Authentication Failed: ${data}`)
         }
     }
 
@@ -44,7 +56,7 @@ export default function Login({ navigation }) {
                 <AntDesign name="user" size={24} color={emailfocus===true?"red":"black"} />
                 <TextInput style={styles.input} placeholder='Email'
                 value={Email} 
-                onChange={(e)=>setEmail(e)}
+                onChangeText={(e)=>setEmail(e)}
                     onFocus={()=>{
                         setEmailFocus(true)
                         setPassordFocus(false)
@@ -56,7 +68,7 @@ export default function Login({ navigation }) {
                 <Feather name="lock" size={24} color={passwordfocus===true?"red":"black"} />
                 <TextInput style={styles.input} placeholder='Password'
                 value={Password}
-                onChange={(e)=>setPassword(e)}
+                onChangeText={(e)=>setPassword(e)}
                 onFocus={()=>{
                     setEmailFocus(false)
                     setPassordFocus(true)
@@ -69,8 +81,8 @@ export default function Login({ navigation }) {
                 }}></Octicons>
             </View>
 
-            <TouchableOpacity  style={styles.btn} onPress={()=>navigation.navigate('Home')}>
-              <Text style={{color:"white", fontSize:18}} onClick={handlelogin}>Register</Text>
+            <TouchableOpacity  style={styles.btn} onPress={handlelogin}>
+              <Text style={{color:"white", fontSize:18}} >Register</Text>
             </TouchableOpacity>
 
             <Text style={{color:"grey"}}>Forgot Password </Text>

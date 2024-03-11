@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar, Alert } from 'react-native';
+import stringSimilarity from 'string-similarity';
 import bgImage from "../assets/bg2.jpg"
 import avatar from "../assets/avatar.png"
-import search from "../assets/seach.png"
+import searchicon from "../assets/seach.png"
 import soil from "../assets/soil.jpg"
 import crop from "../assets/crop.jpg"
 import profile from "../assets/profile.png"
 import home from "../assets/home.png"
 import Scroll from './comp/Scroll';
 import * as Speech from 'expo-speech';
-import { recentCrop } from './auth/recent';
+import { add_recentCrop, recentCrop } from './auth/recent';
+import { useSelector } from 'react-redux';
+import crop_json from './data/crop_json';
 export default function Home({ navigation }) {
   const [text, setText] = useState('farm expert me aapka swagat hai');
   const handleSpeak = async () => {
@@ -17,17 +20,40 @@ export default function Home({ navigation }) {
       Speech.speak(text, { language: 'hin' });
     }
   };
+  const [search, setSearch] = useState("");
+  const [recent_crops, setRecentCrops] = useState([]);
+  const filteredCrops = crop_json.filter(crop => 
+    crop.name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const user_data = useSelector(state => state.value)
   useEffect(() => {
     handleSpeak();
+    handlesearch();
   }, [])
 
   const handlesearch = async () => {
-    const data = await recentCrop()
-    if (data) {
-      navigation.navigate("Home")
+    const data = await recentCrop(user_data.payload.token)
+    if (data.recentCrop) {
+      console.log("data",data.recentCrop);
+      setRecentCrops(data.recentCrop);
     }
     else {
-      Alert.alert("Failed")
+      Alert.alert("Failed", data)
+    }
+  }
+
+  const handle_crop_search = async () => {
+    const cropNames = crop_json.map(crop => crop.name);
+    const matches = stringSimilarity.findBestMatch(search, cropNames);
+    // console.log(matches.bestMatch.target);
+    const data = await add_recentCrop(user_data.payload.token, matches.bestMatch.target)
+    if (data != null && data.crop) {
+      setSearch("");
+      navigation.navigate("Predict", { crop: crop_json.find(crop => crop.name === matches.bestMatch.target)})
+    }
+    else {
+      Alert.alert("Failed", data)
     }
   }
 
@@ -46,27 +72,26 @@ export default function Home({ navigation }) {
       />
 
       {/* handle search yaha daala h jisse jaise hi home aae search update ho jae */}
-      <View className="flex w-full flex-row items-center justify-between" onChange={handlesearch}>
+      <View className="flex w-full flex-row items-center justify-between">
         <View>
           <Text className="text-slate-300 font-bold text-xl text-left">Hi There !!</Text>
           <Text className="text-white font-bold text-2xl text-left">Happy Farming</Text>
         </View>
-        <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate("Profile")}><Image source={avatar} style={{ width: 50, height: 50 }} /></TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate("Profile")}><Image source={avatar} style={{ width: 50, height: 50 }} /></TouchableOpacity>
       </View>
       <View className="rounded-3xl flex gap-2 flex-row items-center justify-center mt-12" style={styles.input}>
-        <Image source={search} style={{ width: 30, height: 30 }} />
-        <TextInput className="font-bold mb-2 text-lg" style={{ width: "80%" }} placeholder="Search crop name...." 
-        />
+        <TextInput value={search} onChangeText={e => setSearch(e)} className="font-bold mb-2 text-lg" style={{ width: "80%" }} placeholder="Search crop name...." />
+        <TouchableOpacity onPress={handle_crop_search} activeOpacity={0.7}><Image source={searchicon} style={{ width: 30, height: 30 }} /></TouchableOpacity>
       </View>
 
       {/* suggested crops */}
       <View className="w-full h-28 mt-4">
         <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
-          <Scroll crop="Rice" navigation={navigation}/>
-          <Scroll crop="Maze" navigation={navigation}/>
-          <Scroll crop="Mango" navigation={navigation}/>
-          <Scroll crop="Pea" navigation={navigation}/>
-          <Scroll crop="Orange" navigation={navigation}/>
+          {
+            crop_json.map((crop, i) => (
+              <Scroll key={i} crop={crop} navigation={navigation} />
+            ))
+          }
         </ScrollView>
       </View>
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
@@ -75,47 +100,47 @@ export default function Home({ navigation }) {
       <View><Text className="text-white text-2xl font-bold">Features</Text></View>
       <View className="w-screen flex items-center justify-center">
         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-      <View className="flex w-screen p-4 pt-7 flex-row items-start justify-center gap-2">
-        <TouchableOpacity style={{elevation:10}} onPress={()=>navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
-          <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
-            <Image source={soil} className="rounded-3xl h-full w-full" />
+          <View className="flex w-screen p-4 pt-7 flex-row items-start justify-center gap-2">
+            <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+                <Image source={soil} className="rounded-3xl h-full w-full" />
+              </View>
+              <View className='w-full h-1/6' >
+                <Text className="text-black font-bold text-center">Predict Soil</Text>
+                <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+                <Image source={crop} className="rounded-3xl h-full w-full" />
+              </View>
+              <View className='w-full h-1/6' >
+                <Text className="text-black font-bold text-center">Predict Crop</Text>
+                <Text className="text-center text-slate-500 text-xs">for given Soil Condition</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <View className='w-full h-1/6' >
-            <Text className="text-black font-bold text-center">Predict Soil</Text>
-            <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
+          <View className="flex w-screen p-4 pt-7 flex-row items-start justify-center gap-2">
+            <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+                <Image source={soil} className="rounded-3xl h-full w-full" />
+              </View>
+              <View className='w-full h-1/6' >
+                <Text className="text-black font-bold text-center">Predict Soil</Text>
+                <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+                <Image source={crop} className="rounded-3xl h-full w-full" />
+              </View>
+              <View className='w-full h-1/6' >
+                <Text className="text-black font-bold text-center">Predict Crop</Text>
+                <Text className="text-center text-slate-500 text-xs">for given Soil Condition</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={{elevation:10}} onPress={()=>navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
-          <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
-            <Image source={crop} className="rounded-3xl h-full w-full" />
-          </View>
-          <View className='w-full h-1/6' >
-            <Text className="text-black font-bold text-center">Predict Crop</Text>
-            <Text className="text-center text-slate-500 text-xs">for given Soil Condition</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      <View className="flex w-screen p-4 pt-7 flex-row items-start justify-center gap-2">
-        <TouchableOpacity style={{elevation:10}} onPress={()=>navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
-          <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
-            <Image source={soil} className="rounded-3xl h-full w-full" />
-          </View>
-          <View className='w-full h-1/6' >
-            <Text className="text-black font-bold text-center">Predict Soil</Text>
-            <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={{elevation:10}} onPress={()=>navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
-          <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
-            <Image source={crop} className="rounded-3xl h-full w-full" />
-          </View>
-          <View className='w-full h-1/6' >
-            <Text className="text-black font-bold text-center">Predict Crop</Text>
-            <Text className="text-center text-slate-500 text-xs">for given Soil Condition</Text>
-          </View>
-        </TouchableOpacity>
-      </View>
-      </ScrollView>
+        </ScrollView>
       </View>
       <View style={{ height: 2 }} className="bg-slate-300 w-full"></View>
       <View className="w-full"><Text className="text-left text-slate-300 font-bold">{"scroll ->"}</Text></View>
