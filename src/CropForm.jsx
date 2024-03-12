@@ -24,7 +24,7 @@ export default function CropForm() {
 
 // ab button tu bana lena handle wala function complete h -----
 const handlecropform = async () => {
-  const data = await submit({ Cropname,Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH })
+  const data = await submit(Cropname,Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
   if (data) {
     navigation.navigate("Predict")
   }
