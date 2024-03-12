@@ -3,7 +3,7 @@ import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button } fro
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
 import { Alert } from 'react-native';
-import { submit } from './auth/cropsAndSoil';
+import { submitSoilForm } from './auth/recent';
 export default function SoilForm() {
   const [Nitrogen, setNitrogen] = useState("");
   const [Phosphorous, setPhosphorous] = useState("");
@@ -13,7 +13,7 @@ export default function SoilForm() {
   const [Rainfall, setRainfall] = useState("");
   const [pH, setPH] = useState("");
   const handlesoilform = async () => {
-    const data = await submit({ Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH })
+    const data = await submit(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
     if (data) {
       navigation.navigate("Predict")
     }

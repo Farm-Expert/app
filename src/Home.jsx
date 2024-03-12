@@ -36,6 +36,7 @@ export default function Home({ navigation }) {
     const data = await recentCrop(user_data.payload.token)
     if (data.recentCrop) {
       console.log("data",data.recentCrop);
+      
       setRecentCrops(data.recentCrop);
     }
     else {
@@ -90,6 +91,7 @@ export default function Home({ navigation }) {
           {
             crop_json.map((crop, i) => (
               <Scroll key={i} crop={crop} navigation={navigation} />
+              
             ))
           }
         </ScrollView>
