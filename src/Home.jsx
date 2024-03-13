@@ -22,7 +22,7 @@ export default function Home({ navigation }) {
   };
   const [search, setSearch] = useState("");
   const [recent_crops, setRecentCrops] = useState([]);
-  const filteredCrops = crop_json.filter(crop => 
+  const filteredCrops = crop_json.filter(crop =>
     crop.name.toLowerCase().includes(search.toLowerCase())
   );
 
@@ -34,9 +34,12 @@ export default function Home({ navigation }) {
 
   const handlesearch = async () => {
     const data = await recentCrop(user_data.payload.token)
+
     if (data.recentCrop) {
-      console.log("data",data.recentCrop);
-      
+
+      console.log("data", data.recentCrop);
+      data.recentCrop.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))
+        
       setRecentCrops(data.recentCrop);
     }
     else {
@@ -51,7 +54,8 @@ export default function Home({ navigation }) {
     const data = await add_recentCrop(user_data.payload.token, matches.bestMatch.target)
     if (data != null && data.crop) {
       setSearch("");
-      navigation.navigate("Predict", { crop: crop_json.find(crop => crop.name === matches.bestMatch.target)})
+      handlesearch();
+      navigation.navigate("Predict", { crop: crop_json.find(crop => crop.name === matches.bestMatch.target) })
     }
     else {
       Alert.alert("Failed", data)
@@ -89,10 +93,20 @@ export default function Home({ navigation }) {
       <View className="w-full h-28 mt-4">
         <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
           {
-            crop_json.map((crop, i) => (
-              <Scroll key={i} crop={crop} navigation={navigation} />
-              
-            ))
+            // crop_json.filter(crop => recent_crops.some(e => e.crop === crop.name)).map((crop, i) => {
+            //   console.log("Filtered crop:", crop.name); // Add the console.log here
+            //   return (
+            //     <Scroll key={i} crop={crop} navigation={navigation} />
+            //   );
+            // })
+            recent_crops.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))
+              .map((recentCrop, i) => {
+                const matchingCrop = crop_json.find(crop => crop.name === recentCrop.crop);
+                console.log("Filtered crop:", matchingCrop.name); // Add the console.log here
+                return (
+                  <Scroll key={i} crop={matchingCrop} navigation={navigation} />
+                );
+              })
           }
         </ScrollView>
       </View>
