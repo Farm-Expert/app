@@ -4,6 +4,7 @@ import bgimage from '../assets/bg.webp';
 import CropScroll from './comp/CropScroll';
 import back from "../assets/back.png"
 
+
 export default function Predict({navigation, route}) {
   const { crop } = route.params;
   return (
