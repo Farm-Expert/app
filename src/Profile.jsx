@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar, ScrollView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar, ScrollView, Alert, ToastAndroid } from 'react-native';
 import profile from "../assets/profile.png"
 import avatar from "../assets/avatar.png"
 import home from "../assets/home.png"
@@ -28,11 +28,12 @@ export default function Profile({ navigation }) {
     const [Temperature, setTemperature] = useState("");
     const [Rainfall, setRainfall] = useState("");
     const [pH, setPH] = useState("");
-    const [isCheckedPrev, setisCheckedPrev] = useState(false);
-    const [isCheckedCurr, setisCheckedCurr] = useState(false);
-    const [imgsrc, setImgSrc] = useState("https://firebasestorage.googleapis.com/v0/b/farm-expert-d17fd.appspot.com/o/images%2F1704810236599.jpg?alt=media&token=51cfebcb-94ef-411a-a204-905693f90847");
+    const [imgsrc, setImgSrc] = useState(useSelector(state => state.profile_img));
     const user_data=useSelector(state => state.value)
     const dispatch = useDispatch();
+    function showToast(message) {
+        ToastAndroid.show(message, ToastAndroid.SHORT);
+    }
 
     useEffect(() => {
         (async () => {
@@ -48,9 +49,6 @@ export default function Profile({ navigation }) {
         setTemperature(Number(user_data.payload.user.temperature));
         setRainfall(Number(user_data.payload.user.rainfall));
         setPH(Number(user_data.payload.user.ph));
-        if(user_data.payload.user.profileimg){
-            setImgSrc(user_data.payload.user.profileimg);
-        }
     }, []);
 
     const pickImage = async () => {
@@ -67,14 +65,13 @@ export default function Profile({ navigation }) {
             const storageRef = ref(storage, (`images/${Date.now()}.png`));
             try {
                 await uploadBytes(storageRef, blob)
-                Alert.alert('Image uploaded successfully!')
+                showToast('Image uploaded successfully!')
                 const img_URL=await getDownloadURL(storageRef)
+                dispatch(addProfileimage(img_URL));
                 setImgSrc(img_URL);
-                console.log("inside firebase",img_URL);
                 const data=await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, img_URL)
                 if(data){
-                    dispatch(addProfileimage(img_URL));
-                    console.log("profile updated",data);
+                    console.log("profile updated",img_URL);
                     console.log("profile updated done",user_data.payload.user.profileimg);
                 }
                 else{

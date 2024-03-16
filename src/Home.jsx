@@ -15,37 +15,32 @@ import { useSelector } from 'react-redux';
 import crop_json from './data/crop_json';
 export default function Home({ navigation }) {
   const [text, setText] = useState('farm expert me aapka swagat hai');
-  const [imgsrc, setImgSrc] = useState("https://firebasestorage.googleapis.com/v0/b/farm-expert-d17fd.appspot.com/o/images%2F1704810236599.jpg?alt=media&token=51cfebcb-94ef-411a-a204-905693f90847");
+  const imgsrc=useSelector(state => state.profile_img)
   const user_data=useSelector(state => state.value)
   const handleSpeak = async () => {
     if (text.trim() !== '') {
       Speech.speak(text, { language: 'hin' });
+      console.log(imgsrc);
     }
   };
   const [search, setSearch] = useState("");
   const [recent_crops, setRecentCrops] = useState([]);
-  const filteredCrops = crop_json.filter(crop =>
-    crop.name.toLowerCase().includes(search.toLowerCase())
-  );
 
   useEffect(() => {
     handleSpeak();
     handlesearch();
-    console.log("user_data",user_data.payload.user.profileimg);
-    if(user_data.payload.user.profileimg && user_data.payload.user.profileimg !== ""){
-      console.log("img",user_data.payload.user.profileimg);
-      setImgSrc(user_data.payload.user.profileimg);
-    }
+    // console.log("user_data",user_data.payload.user.profileimg);
+    // if(user_data.payload.user.profileimg && user_data.payload.user.profileimg !== ""){
+    //   console.log("img",user_data.payload.user.profileimg);
+    //   setImgSrc(user_data.payload.user.profileimg);
+    // }
   }, [])
 
   const handlesearch = async () => {
     const data = await recentCrop(user_data.payload.token)
 
     if (data.recentCrop) {
-
-      console.log("data", data.recentCrop);
       data.recentCrop.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))
-        
       setRecentCrops(data.recentCrop);
     }
     else {
@@ -85,7 +80,7 @@ export default function Home({ navigation }) {
       {/* handle search yaha daala h jisse jaise hi home aae search update ho jae */}
       <View className="flex w-full flex-row items-center justify-between">
         <View>
-          <Text className="text-slate-300 font-bold text-xl text-left">Hi There !!</Text>
+          <Text className="text-slate-300 font-bold text-xl text-left">Hi There !! {user_data.payload.user.name}</Text>
           <Text className="text-white font-bold text-2xl text-left">Happy Farming</Text>
         </View>
         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate("Profile")}><Image className="rounded-full" source={{ uri: imgsrc }} style={{ width: 50, height: 50 }} /></TouchableOpacity>
