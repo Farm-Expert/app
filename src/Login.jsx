@@ -6,7 +6,7 @@ import { Octicons } from '@expo/vector-icons';
 import * as Speech from 'expo-speech';
 import { login } from './auth/auth';
 import { Alert } from 'react-native';
-import { add } from '../redux/Auth';
+import { add, addProfileimage } from '../redux/Auth';
 import { useDispatch } from 'react-redux';
 
 export default function Login({ navigation }) {
@@ -30,6 +30,7 @@ export default function Login({ navigation }) {
         const data=await login(Email,Password)
         if(data!=null && data.token){
             dispatch(add(data));
+            if(data.user.profileimg!=null && data.user.profileimg!="")dispatch(addProfileimage(data.user.profileimg));
             setEmail("");
             setPassword("");
             showToast("Logged in successfully!");

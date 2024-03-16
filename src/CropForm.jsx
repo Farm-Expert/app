@@ -1,18 +1,13 @@
 import React from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TextInput} from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, KeyboardAvoidingView, TouchableOpacity} from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
 import { useState } from 'react';
 import { Alert } from 'react-native';
+import back from "../assets/back.png"
 
-export default function CropForm() {
-  // const [nitrogenfocus, setNitrogenFocus] = useState(false);
-  // const [phosphorousfocus, setPhosphorousFocus] = useState(false);
-  // const [potassiumfocus, setPotassiumFocus] = useState(false);
-  // const [humidityfocus, setHumidityFocus] = useState(false);
-  // const [temperaturefocus, setTemperatureFocus] = useState(false);
-  // const [rainfallfocus, setRainfallFocus] = useState(false);
-  // const [phfocus, setPhFocus]= useState(false)
+export default function CropForm({navigation}) {
+
   const [Cropname,setCropName]= useState("")
   const [Nitrogen, setNitrogen] =useState("");
   const [Phosphorous, setPhosphorous] =useState("");
@@ -22,7 +17,6 @@ export default function CropForm() {
   const [Rainfall, setRainfall] =useState("");
   const [pH, setPH] =useState("");
 
-// ab button tu bana lena handle wala function complete h -----
 const handlecropform = async () => {
   const data = await submit(Cropname,Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
   if (data) {
@@ -43,23 +37,17 @@ const handlecropform = async () => {
     <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
         <Image source={img} className="h-full w-screen m-0 p-0" style={styles.img} />
     </View>
-
-    <View className="flex w-full rounded-3xl flex-row items-center justify-center h-2/3 bg-white">
+    <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-10">
+            <Image source={back} style={{ width: 20, height: 20 }} />
+    </TouchableOpacity>
+    <KeyboardAvoidingView className="flex w-full rounded-3xl items-center justify-center h-2/3 bg-white">
+      <Text className="text-2xl font-bold">Crop Information</Text>
       <View className="flex w-full flex-row flex-wrap items-center justify-between p-3">
       <TextInput
         style={styles.input}
         placeholder="Nitrogen"
         value={Nitrogen}
         onChange={(e)=>setNitrogen(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(true)
-      //     setPhosphorousFocus(false)
-      //     setPotassiumFocus(false)
-      //     setHumidityFocus(false)
-      //     setTemperatureFocus(false)
-      //     setRainfallFocus(false)
-      //     setPhFocus(false)
-      // }}
         keyboardType="numeric"
       />
       <TextInput
@@ -67,15 +55,6 @@ const handlecropform = async () => {
         placeholder="Phophorous"
         value={Phosphorous}
         onChange={(e)=>setPhosphorous(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(false)
-      //     setPhosphorousFocus(true)
-      //     setPotassiumFocus(false)
-      //     setHumidityFocus(false)
-      //     setTemperatureFocus(false)
-      //     setRainfallFocus(false)
-      //     setPhFocus(false)
-      // }}
         keyboardType="numeric"
       />
       <TextInput
@@ -83,15 +62,6 @@ const handlecropform = async () => {
         placeholder="Potassium"
         value={Potassium}
         onChange={(e)=>setPotassium(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(false)
-      //     setPhosphorousFocus(false)
-      //     setPotassiumFocus(true)
-      //     setHumidityFocus(false)
-      //     setTemperatureFocus(false)
-      //     setRainfallFocus(false)
-      //     setPhFocus(false)
-      // }}
         keyboardType="numeric"
       />
       <TextInput
@@ -99,15 +69,6 @@ const handlecropform = async () => {
         placeholder="Humidity"
         value={Humidity}
         onChange={(e)=>setHumidity(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(false)
-      //     setPhosphorousFocus(false)
-      //     setPotassiumFocus(false)
-      //     setHumidityFocus(true)
-      //     setTemperatureFocus(false)
-      //     setRainfallFocus(false)
-      //     setPhFocus(false)
-      // }}
         keyboardType="numeric"
       />
       <TextInput
@@ -115,15 +76,6 @@ const handlecropform = async () => {
         placeholder="Temperature"
         value={Temperature}
         onChange={(e)=>setTemperature(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(false)
-      //     setPhosphorousFocus(false)
-      //     setPotassiumFocus(false)
-      //     setHumidityFocus(false)
-      //     setTemperatureFocus(true)
-      //     setRainfallFocus(false)
-      //     setPhFocus(false)
-      // }}
         keyboardType="numeric"
       />
       <TextInput
@@ -131,15 +83,6 @@ const handlecropform = async () => {
         placeholder="Rainfall"
         value={Rainfall}
         onChange={(e)=>setRainfall(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(false)
-      //     setPhosphorousFocus(false)
-      //     setPotassiumFocus(false)
-      //     setHumidityFocus(false)
-      //     setTemperatureFocus(false)
-      //     setRainfallFocus(true)
-      //     setPhFocus(false)
-      // }}
         keyboardType="numeric"
       />
       <TextInput
@@ -147,19 +90,10 @@ const handlecropform = async () => {
         placeholder="pH"
         value={pH}
         onChange={(e)=>setPH(e)}
-      //   onFocus={() => {
-      //     setNitrogenFocus(false)
-      //     setPhosphorousFocus(false)
-      //     setPotassiumFocus(false)
-      //     setHumidityFocus(false)
-      //     setTemperatureFocus(false)
-      //     setRainfallFocus(false)
-      //     setPhFocus(true)
-      // }}
         keyboardType="numeric"
       />
       </View>
-    </View>
+    </KeyboardAvoidingView>
 
     </ImageBackground>
   );
@@ -173,7 +107,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   img: {
-    height: 250,
+    height: 180,
     width:400,
     resizeMode: "contain"
   },

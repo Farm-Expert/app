@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
 import { Alert } from 'react-native';
@@ -7,9 +7,10 @@ import { recentSoilForm, submitSoil } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
+import back from "../assets/back.png"
 import Scroll from './comp/Scroll';
 
-export default function SoilForm() {
+export default function SoilForm({navigation}) {
   const [Nitrogen, setNitrogen] = useState("");
   const [Phosphorous, setPhosphorous] = useState("");
   const [Potassium, setPotassium] = useState("");
@@ -63,18 +64,17 @@ export default function SoilForm() {
   }
 
   const getPrevData = async () => {
-      setNitrogen(Number(user_data.payload.user.nitrogen));
-      setPhosphorous(Number(user_data.payload.user.phosphorous));
-      setPotassium(Number(user_data.payload.user.potassium));
-      setHumidity(Number(user_data.payload.user.humidity));
-      setTemperature(Number(user_data.payload.user.temperature));
-      setRainfall(Number(user_data.payload.user.rainfall));
-      setPH(Number(user_data.payload.user.ph));
+      setNitrogen(`${user_data.payload.user.nitrogen}`);
+      setPhosphorous(`${user_data.payload.user.phosphorous}`);
+      setPotassium(`${user_data.payload.user.potassium}`);
+      setHumidity(`${user_data.payload.user.humidity}`);
+      setTemperature(`${user_data.payload.user.temperature}`);
+      setRainfall(`${user_data.payload.user.rainfall}`);
+      setPH(`${user_data.payload.user.ph}`);
   }
 
   const handleCurrCheck=(e)=>{
     if(e){
-      // submit soil store wali api
       handleSoilFormHistory();
     }
     else return
@@ -108,10 +108,13 @@ export default function SoilForm() {
       <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
         <Image source={img} className="h-full w-screen m-4 p-4" style={styles.img} />
       </View>
+      <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-10">
+            <Image source={back} style={{ width: 20, height: 20 }} />
+      </TouchableOpacity>
 
-      <View className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
-
-        <View className="w-full flex-wrap flex flex-row items-center justify-end">
+      <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
+        <Text className="text-2xl font-bold">Soil Information</Text>
+        <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
             style={styles.checkbox}
             value={isCheckedPrev}
@@ -131,49 +134,49 @@ export default function SoilForm() {
             placeholder="Nitrogen"
             value={Nitrogen}
             onChangeText={(e) => setNitrogen(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.input}
             placeholder="Phophorous"
             value={Phosphorous}
             onChangeText={(e) => setPhosphorous(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.input}
             placeholder="Potassium"
             value={Potassium}
             onChangeText={(e) => setPotassium(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.input}
             placeholder="Humidity"
             value={Humidity}
             onChangeText={(e) => setHumidity(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.input}
             placeholder="Temperature"
             value={Temperature}
             onChangeText={(e) => setTemperature(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.input}
             placeholder="Rainfall"
             value={Rainfall}
             onChangeText={(e) => setRainfall(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
           <TextInput
             style={styles.input}
             placeholder="pH"
             value={pH}
             onChangeText={(e) => setPH(e)}
-            keyboardType="default"
+            keyboardType="number-pad"
           />
         </View>
         <View className="w-full flex-wrap flex flex-row items-center justify-center">
@@ -189,9 +192,12 @@ export default function SoilForm() {
           <Text style={styles.paragraph}>Add this soil information as my current information</Text>
         </View>
         <Button title='submit' color="#007F73" onPress={handleSubmit}>Secondary</Button>
-      </View>
+      </KeyboardAvoidingView>
 
       {/* <Scroll/> */}
+      <ScrollView>
+        
+      </ScrollView>
 
     </ImageBackground>
   );
@@ -205,7 +211,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   img: {
-    height: 250,
+    height: 180,
     width: 400,
     resizeMode: "contain"
   },
