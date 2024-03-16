@@ -11,6 +11,7 @@ import SoilForm from './src/SoilForm';
 import CropForm from './src/CropForm';
 import Login from './src/Login';
 import Signup from './src/Signup';
+import Plant_Disease from './src/Plant_Disease';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
           <Stack.Screen name="Predict" component={Predict} options={{ headerShown: false }} />
           <Stack.Screen name="Soil" component={SoilForm} options={{ headerShown: false }} />
           <Stack.Screen name="Crop" component={CropForm} options={{ headerShown: false }} />
+          <Stack.Screen name="disease" component={Plant_Disease} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

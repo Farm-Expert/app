@@ -8,7 +8,6 @@ import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
 import back from "../assets/back.png"
-import Scroll from './comp/Scroll';
 
 export default function SoilForm({navigation}) {
   const [Nitrogen, setNitrogen] = useState("");
@@ -196,7 +195,7 @@ export default function SoilForm({navigation}) {
 
       {/* <Scroll/> */}
       <ScrollView>
-        
+
       </ScrollView>
 
     </ImageBackground>
