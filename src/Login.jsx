@@ -83,7 +83,7 @@ export default function Login({ navigation }) {
             </View>
 
             <TouchableOpacity  style={styles.btn} onPress={handlelogin}>
-              <Text style={{color:"white", fontSize:18}} >Register</Text>
+              <Text style={{color:"white", fontSize:18}} >Log in</Text>
             </TouchableOpacity>
 
             <Text style={{color:"grey"}}>Forgot Password </Text>

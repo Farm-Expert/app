@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar, ScrollView, Alert, ToastAndroid } from 'react-native';
-import profile from "../assets/profile.png"
-import avatar from "../assets/avatar.png"
-import home from "../assets/home.png"
+import { View, Text, TouchableOpacity, Image, StyleSheet, ImageBackground, StatusBar, ScrollView, ToastAndroid } from 'react-native';
 import bgImage from "../assets/bg4.jpg"
 import back from "../assets/back.png"
 import CropScroll from './comp/CropScroll';

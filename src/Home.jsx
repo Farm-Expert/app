@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, ScrollView, TouchableOpacity, StatusBar, Alert } from 'react-native';
 import stringSimilarity from 'string-similarity';
 import bgImage from "../assets/bg2.jpg"
-import avatar from "../assets/avatar.png"
 import searchicon from "../assets/seach.png"
 import soil from "../assets/soil.jpg"
+import disease_plant from "../assets/disease_plant.jpg"
 import crop from "../assets/crop.jpg"
-import profile from "../assets/profile.png"
-import home from "../assets/home.png"
 import Scroll from './comp/Scroll';
 import * as Speech from 'expo-speech';
 import { add_recentCrop, recentCrop } from './auth/recent';
@@ -29,11 +27,6 @@ export default function Home({ navigation }) {
   useEffect(() => {
     handleSpeak();
     handlesearch();
-    // console.log("user_data",user_data.payload.user.profileimg);
-    // if(user_data.payload.user.profileimg && user_data.payload.user.profileimg !== ""){
-    //   console.log("img",user_data.payload.user.profileimg);
-    //   setImgSrc(user_data.payload.user.profileimg);
-    // }
   }, [])
 
   const handlesearch = async () => {
@@ -51,7 +44,6 @@ export default function Home({ navigation }) {
   const handle_crop_search = async () => {
     const cropNames = crop_json.map(crop => crop.name);
     const matches = stringSimilarity.findBestMatch(search, cropNames);
-    // console.log(matches.bestMatch.target);
     const data = await add_recentCrop(user_data.payload.token, matches.bestMatch.target)
     if (data != null && data.crop) {
       setSearch("");
@@ -103,7 +95,6 @@ export default function Home({ navigation }) {
             recent_crops.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))
               .map((recentCrop, i) => {
                 const matchingCrop = crop_json.find(crop => crop.name === recentCrop.crop);
-                console.log("Filtered crop:", matchingCrop.name); // Add the console.log here
                 return (
                   <Scroll key={i} crop={matchingCrop} navigation={navigation} />
                 );
@@ -138,13 +129,13 @@ export default function Home({ navigation }) {
             </TouchableOpacity>
           </View>
           <View className="flex w-screen p-4 pt-7 flex-row items-start justify-center gap-2">
-            <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+            <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("disease")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
               <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
-                <Image source={soil} className="rounded-3xl h-full w-full" />
+                <Image source={disease_plant} className="rounded-3xl h-full w-full" />
               </View>
               <View className='w-full h-1/6' >
-                <Text className="text-black font-bold text-center">Predict Soil</Text>
-                <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
+                <Text className="text-black font-bold text-center">Disease Prediction</Text>
+                <Text className="text-center text-slate-500 text-xs">for predicting plant disease</Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
