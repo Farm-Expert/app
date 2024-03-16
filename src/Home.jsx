@@ -15,6 +15,8 @@ import { useSelector } from 'react-redux';
 import crop_json from './data/crop_json';
 export default function Home({ navigation }) {
   const [text, setText] = useState('farm expert me aapka swagat hai');
+  const [imgsrc, setImgSrc] = useState("https://firebasestorage.googleapis.com/v0/b/farm-expert-d17fd.appspot.com/o/images%2F1704810236599.jpg?alt=media&token=51cfebcb-94ef-411a-a204-905693f90847");
+  const user_data=useSelector(state => state.value)
   const handleSpeak = async () => {
     if (text.trim() !== '') {
       Speech.speak(text, { language: 'hin' });
@@ -26,10 +28,14 @@ export default function Home({ navigation }) {
     crop.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  const user_data = useSelector(state => state.value)
   useEffect(() => {
     handleSpeak();
     handlesearch();
+    console.log("user_data",user_data.payload.user.profileimg);
+    if(user_data.payload.user.profileimg && user_data.payload.user.profileimg !== ""){
+      console.log("img",user_data.payload.user.profileimg);
+      setImgSrc(user_data.payload.user.profileimg);
+    }
   }, [])
 
   const handlesearch = async () => {
@@ -82,7 +88,7 @@ export default function Home({ navigation }) {
           <Text className="text-slate-300 font-bold text-xl text-left">Hi There !!</Text>
           <Text className="text-white font-bold text-2xl text-left">Happy Farming</Text>
         </View>
-        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate("Profile")}><Image source={avatar} style={{ width: 50, height: 50 }} /></TouchableOpacity>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate("Profile")}><Image className="rounded-full" source={{ uri: imgsrc }} style={{ width: 50, height: 50 }} /></TouchableOpacity>
       </View>
       <View className="rounded-3xl flex gap-2 flex-row items-center justify-center mt-12" style={styles.input}>
         <TextInput value={search} onChangeText={e => setSearch(e)} className="font-bold mb-2 text-lg" style={{ width: "80%" }} placeholder="Search crop name...." />

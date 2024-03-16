@@ -11,9 +11,12 @@ const Auth=createSlice({
         },
         remove:(state)=>{
             state.value="";
+        },
+        addProfileimage:(state,action)=>{
+            state.value.payload.user.profileimage=action;
         }
     }
 })
 
-export const {add,remove}=Auth.actions;
+export const {add,remove,addProfileimage}=Auth.actions;
 export default Auth.reducer

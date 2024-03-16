@@ -35,7 +35,7 @@ export default function SoilForm() {
 
   // to store soil history as curr ie in profile
   const handleSoilFormHistory = async () => {
-    const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
+    const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
     // console.log("curr",data);
     if(data){
       console.log("soil history set as curr",data);
