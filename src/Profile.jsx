@@ -10,17 +10,29 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import * as Clipboard from 'expo-clipboard';
 import { FontAwesome } from '@expo/vector-icons';
+import { updateProfile } from './auth/profileUpdate';
 import { AntDesign } from '@expo/vector-icons';
 import { storage } from './firebase/firebaseconfig'
 import { addDoc, collection } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProfileimage } from '../redux/Auth';
 
 export default function Profile({ navigation }) {
-
+    const [Nitrogen, setNitrogen] = useState("");
+    const [Phosphorous, setPhosphorous] = useState("");
+    const [Potassium, setPotassium] = useState("");
+    const [Humidity, setHumidity] = useState("");
+    const [Temperature, setTemperature] = useState("");
+    const [Rainfall, setRainfall] = useState("");
+    const [pH, setPH] = useState("");
+    const [isCheckedPrev, setisCheckedPrev] = useState(false);
+    const [isCheckedCurr, setisCheckedCurr] = useState(false);
     const [imgsrc, setImgSrc] = useState("https://firebasestorage.googleapis.com/v0/b/farm-expert-d17fd.appspot.com/o/images%2F1704810236599.jpg?alt=media&token=51cfebcb-94ef-411a-a204-905693f90847");
+    const user_data=useSelector(state => state.value)
+    const dispatch = useDispatch();
 
     useEffect(() => {
         (async () => {
@@ -29,6 +41,16 @@ export default function Profile({ navigation }) {
                 console.error('Permission to access media library denied');
             }
         })();
+        setNitrogen(Number(user_data.payload.user.nitrogen));
+        setPhosphorous(Number(user_data.payload.user.phosphorous));
+        setPotassium(Number(user_data.payload.user.potassium));
+        setHumidity(Number(user_data.payload.user.humidity));
+        setTemperature(Number(user_data.payload.user.temperature));
+        setRainfall(Number(user_data.payload.user.rainfall));
+        setPH(Number(user_data.payload.user.ph));
+        if(user_data.payload.user.profileimg){
+            setImgSrc(user_data.payload.user.profileimg);
+        }
     }, []);
 
     const pickImage = async () => {
@@ -44,20 +66,27 @@ export default function Profile({ navigation }) {
             const blob = await response.blob();
             const storageRef = ref(storage, (`images/${Date.now()}.png`));
             try {
-                uploadBytes(storageRef, blob).then(() => {
-                    Alert.alert('Image uploaded successfully!')
-                    getDownloadURL(storageRef).then((url) => {
-                        setImgSrc(url);
-                        console.log(url);
-                    })
-                })
+                await uploadBytes(storageRef, blob)
+                Alert.alert('Image uploaded successfully!')
+                const img_URL=await getDownloadURL(storageRef)
+                setImgSrc(img_URL);
+                console.log("inside firebase",img_URL);
+                const data=await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, img_URL)
+                if(data){
+                    dispatch(addProfileimage(img_URL));
+                    console.log("profile updated",data);
+                    console.log("profile updated done",user_data.payload.user.profileimg);
+                }
+                else{
+                    console.log("failed updating profile");
+                }
             } catch (error) {
                 console.error('Error uploading image:', error.message);
             }
         }
     };
 
-    const user_data=useSelector(state => state.value)
+    
 
     const share=()=>{
         console.log("share")
@@ -155,13 +184,13 @@ export default function Profile({ navigation }) {
                 <View style={{ height: 2 }} className="w-2/3 bg-white"></View>
                 <View className="p-5" style={{ height: 150 }}>
                     <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
-                        <CropScroll name={"Nitrogen"} value={122} />
-                        <CropScroll name={"PH"} value={122} />
-                        <CropScroll name={"Temperature"} value={122} />
-                        <CropScroll name={"Phosphorus"} value={122} />
-                        <CropScroll name={"Rainfall"} value={122} />
-                        <CropScroll name={"Potassium"} value={122} />
-                        <CropScroll name={"Humidity"} value={122} />
+                        <CropScroll name={"Nitrogen"} value={Nitrogen} />
+                        <CropScroll name={"PH"} value={pH} />
+                        <CropScroll name={"Temperature"} value={Temperature} />
+                        <CropScroll name={"Phosphorus"} value={Phosphorous} />
+                        <CropScroll name={"Rainfall"} value={Rainfall} />
+                        <CropScroll name={"Potassium"} value={Potassium} />
+                        <CropScroll name={"Humidity"} value={Humidity} />
                     </ScrollView>
                 </View>
             </View>
