@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Farm Expert",
-    "slug": "Farm Expert, an expert partner for farming",
+    "slug": "Farm_Expert",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",
@@ -26,6 +26,11 @@
     },
     "web": {
       "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "92733b12-a9ae-487a-9446-0b3a767a233e"
+      }
     }
   }
 }
