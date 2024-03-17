@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
@@ -7,8 +7,9 @@ import { recentSoilForm, submitSoil } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
-import back from "../assets/back.png"
-import Scroll from './comp/Scroll';
+import back from "../assets/back.png";
+// import RecentPredictedCrop from './comp/recentPredictedCrop';
+import crop_json from './data/crop_json';
 
 export default function SoilForm({navigation}) {
   const [Nitrogen, setNitrogen] = useState("");
@@ -37,7 +38,7 @@ export default function SoilForm({navigation}) {
   // to store soil history as curr ie in profile
   const handleSoilFormHistory = async () => {
     const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
-    // console.log("curr",data);
+    console.log("curr",data);
     if(data){
       console.log("soil history set as curr",data);
     }
@@ -113,7 +114,7 @@ export default function SoilForm({navigation}) {
       </TouchableOpacity>
 
       <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
-        <Text className="text-2xl font-bold">Soil Information</Text>
+        <Text className="text-2xl font-bold">Soil Form</Text>
         <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
             style={styles.checkbox}
@@ -191,13 +192,12 @@ export default function SoilForm({navigation}) {
           />
           <Text style={styles.paragraph}>Add this soil information as my current information</Text>
         </View>
-        <Button title='submit' color="#007F73" onPress={handleSubmit}>Secondary</Button>
+        <Button title='submit' color="#007F73" onPress={handleSubmit}>Submit</Button>
       </KeyboardAvoidingView>
-
-      {/* <Scroll/> */}
-      <ScrollView>
-        
-      </ScrollView>
+      
+      {/* <ScrollView>
+        <RecentPredictedCrop data setNitrogen setPhosphorous setPotassium setTemperature setHumidity setRainfall setPH/>
+      </ScrollView> */}
 
     </ImageBackground>
   );
