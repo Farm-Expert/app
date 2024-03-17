@@ -114,3 +114,33 @@ export const recentSoilForm = async (token) => {
         console.log(error);
     }
 }
+
+export const search_crop=async (cropname)=>{
+    try {
+        const data = await axios.post("http://13.201.75.117:8000/search_crop", { search: cropname });
+        if (data.data.status=="success") {
+            return data.data;
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const chat_agro=async (message)=>{
+    try {
+        const data = await axios.post("http://13.201.75.117:8000/chat", { message: message });
+        if (data.data.res) {
+            data.data.res=data.data.res.replace(/\*/g, '');
+            data.data.res=data.data.res.replace(/Sure, .* :/, ' ');
+            return data.data.res;
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
