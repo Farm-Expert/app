@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
 import { Alert } from 'react-native';
@@ -8,8 +8,8 @@ import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
 import back from "../assets/back.png";
-// import RecentPredictedCrop from './comp/recentPredictedCrop';
 import crop_json from './data/crop_json';
+import RecentPredictedCrop from './comp/recentPredictedCrop';
 
 export default function CropForm({ navigation }) {
 
@@ -24,18 +24,43 @@ export default function CropForm({ navigation }) {
   const [isCheckedPrev, setisCheckedPrev] = useState(false);
   const [isCheckedCurr, setisCheckedCurr] = useState(false);
   const user_data = useSelector(state => state.value);
+  const [cropData, setCropData] = useState([]);  // for getrecentcrop
+
+  useEffect(() => {
+    // to get crop history
+    const getRecentCrop = async () => {
+      const data = await recentCropForm(user_data.payload.token);
+      console.log("crop data", data);
+      if (data) {
+        console.log("get soil (prev)", data.recentCrop);
+        setCropData(data.recentCrop);
+      }
+    }
+    getRecentCrop();
+
+  }, [user_data.payload.token]);
+
+  function showToast(message) {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  }
 
   // to store all crop history
   const handleSubmit = async () => {
-    const data = await submitCrop(user_data.payload.token, Cropname, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
-    if (data) {
-      // navigation.navigate("Predict")
-      Alert.alert(data)
+    if (Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
+      const data = await submitCrop(user_data.payload.token, Cropname, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
+      if (data) {
+        // navigation.navigate("Predict")
+        Alert.alert(data);
+      }
+      else {
+        Alert.alert("Failed")
+      }
     }
     else {
-      Alert.alert("Failed")
+      showToast("Please fill all the fields")
     }
   }
+
 
   // to store crop history as curr ie in profile
   const handleCropFormHistory = async () => {
@@ -49,26 +74,10 @@ export default function CropForm({ navigation }) {
     }
   }
 
-  // to get soil history
-  const getRecentSoil = async () => {
-    const data = await recentCropForm(user_data.payload.token);
-    // console.log("get",data);
-    // console.log("nit",data.nitrogen);
-    if (data) {
-      console.log("get soil (prev)", data);
-      setCropName(data.cropname);
-      setNitrogen(data.nitrogen);
-      setPhosphorous(data.phosphorous);
-      setPotassium(data.potassium);
-      setHumidity(data.humidity);
-      setTemperature(data.temperature);
-      setRainfall(data.rainfall);
-      setPH(data.ph);
-    }
-  }
 
   const getPrevData = async () => {
-    setCropName(`${user_data.payload.cropname}`);
+    // console.log("user ka data",user_data.payload.user);
+    setCropName("");
     setNitrogen(`${user_data.payload.user.nitrogen}`);
     setPhosphorous(`${user_data.payload.user.phosphorous}`);
     setPotassium(`${user_data.payload.user.potassium}`);
@@ -134,10 +143,19 @@ export default function CropForm({ navigation }) {
         <View className="flex w-full flex-wrap flex-row items-center justify-center h-fit m-2">
           <TextInput
             style={styles.input}
+            placeholder="Crop Name"
+            value={Cropname}
+            onChangeText={(e) => setCropName(e)}
+            keyboardType="default"
+
+          />
+          <TextInput
+            style={styles.input}
             placeholder="Nitrogen"
             value={Nitrogen}
             onChangeText={(e) => setNitrogen(e)}
             keyboardType="numeric"
+
           />
           <TextInput
             style={styles.input}
@@ -197,27 +215,30 @@ export default function CropForm({ navigation }) {
         <Button title='submit' color="#007F73" onPress={handleSubmit}>Submit</Button>
       </KeyboardAvoidingView>
 
-      {/* <ScrollView>
-        {crop_json.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))}
-        <RecentPredictedCrop data setNitrogen setPhosphorous setPotassium setTemperature setHumidity setRainfall setPH/>
-      </ScrollView> */}
-
-      {/* <ScrollView>
-        {uniqueCropNames.map(cropName => {
-          // Find the first matching crop for each unique crop name
-          const crop = crop_json.find(crop => crop.name === cropName);
-          if (crop) {
-            return (
-              <React.Fragment key={cropName}>
-                <Text>{cropName}</Text>
-                <Image source={{ uri: crop.picture }} style={{ width: 100, height: 100 }} />
-              </React.Fragment>
-            );
-          } else {
-            return null; // If no matching crop found for the name
-          }
-        })}
-      </ScrollView> */}
+      <ScrollView>
+        {cropData.map((i, index) => {
+          console.log("map",i);
+          const filteredCrop = crop_json.some(crop => crop.name === i.crop)
+          
+          console.log("filter",filteredCrop);
+          return (
+            <RecentPredictedCrop
+              key={index}
+              crop={filteredCrop}
+              data={i}
+              setCropName={setCropName}
+              setNitrogen={setNitrogen}
+              setPhosphorous={setPhosphorous}
+              setPotassium={setPotassium}
+              setTemperature={setTemperature}
+              setHumidity={setHumidity}
+              setRainfall={setRainfall}
+              setPH={setPH}
+            />
+          )
+        })
+        }
+      </ScrollView>
 
     </ImageBackground>
   );
