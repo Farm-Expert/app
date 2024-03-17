@@ -114,3 +114,17 @@ export const recentSoilForm = async (token) => {
         console.log(error);
     }
 }
+
+export const search_crop=async (cropname)=>{
+    try {
+        const data = await axios.post("http://13.201.75.117:8000/search_crop", { search: cropname });
+        if (data.data.status=="success") {
+            return data.data;
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
