@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 
-export default function Scroll({crop,navigation}) {
+export default function RecentPredictedCrop({crop,navigation}) {
 
     return (
         <TouchableOpacity activeOpacity={0.7} onPress={()=>navigation.navigate("Predict",{crop:crop})} className="pr-5">
