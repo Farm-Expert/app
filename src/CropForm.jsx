@@ -10,6 +10,7 @@ import { updateProfile } from './auth/profileUpdate';
 import back from "../assets/back.png";
 import crop_json from './data/crop_json';
 import RecentPredictedCrop from './comp/recentPredictedCrop';
+import stringSimilarity from 'string-similarity';
 
 export default function CropForm({ navigation }) {
 
@@ -26,34 +27,41 @@ export default function CropForm({ navigation }) {
   const user_data = useSelector(state => state.value);
   const [cropData, setCropData] = useState([]);  // for getrecentcrop
 
-  useEffect(() => {
-    // to get crop history
-    const getRecentCrop = async () => {
-      const data = await recentCropForm(user_data.payload.token);
-      console.log("crop data", data);
-      if (data) {
-        console.log("get soil (prev)", data.recentCrop);
-        setCropData(data.recentCrop);
-      }
+  const getRecentCrop = async () => {
+    const data = await recentCropForm(user_data.payload.token);
+    if (data) {
+      let filtercrop = []
+      data.recentCrop.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))
+        .map((recentCrop, i) => {
+          const matchingCrop = crop_json.find(crop => crop.name === recentCrop.crop);
+          filtercrop = [...filtercrop, { name: matchingCrop.name, img: matchingCrop.img, data: recentCrop }];
+        }
+        )
+      filtercrop = filtercrop.reverse();
+      setCropData(filtercrop);
     }
-    getRecentCrop();
+  }
 
+  useEffect(() => {
+    getRecentCrop();
   }, [user_data.payload.token]);
 
   function showToast(message) {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   }
 
-  // to store all crop history
   const handleSubmit = async () => {
-    if (Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
-      const data = await submitCrop(user_data.payload.token, Cropname, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
+    if (Cropname != "" && Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
+      const cropNames = crop_json.map(crop => crop.name);
+      const matches = stringSimilarity.findBestMatch(Cropname, cropNames);
+      const data = await submitCrop(user_data.payload.token, matches.bestMatch.target, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
       if (data) {
-        // navigation.navigate("Predict")
-        Alert.alert(data);
+        showToast(data);
+        handleRefresh();
+        getRecentCrop();
       }
       else {
-        Alert.alert("Failed")
+        showToast("Failed");
       }
     }
     else {
@@ -61,22 +69,18 @@ export default function CropForm({ navigation }) {
     }
   }
 
-
-  // to store crop history as curr ie in profile
   const handleCropFormHistory = async () => {
     const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address, user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
-    // console.log("curr",data);
     if (data) {
-      console.log("soil history set as curr", data);
+      showToast(data);
     }
     else {
-      console.log("failed adding curr");
+      console.log("failed adding soil history as current");
     }
   }
 
 
   const getPrevData = async () => {
-    // console.log("user ka data",user_data.payload.user);
     setCropName("");
     setNitrogen(`${user_data.payload.user.nitrogen}`);
     setPhosphorous(`${user_data.payload.user.phosphorous}`);
@@ -96,7 +100,6 @@ export default function CropForm({ navigation }) {
 
   const handlePrevCheck = (e) => {
     if (e) {
-      // profile se get wali api
       getPrevData();
     }
     else handleRefresh();
@@ -125,7 +128,7 @@ export default function CropForm({ navigation }) {
       <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-10">
         <Image source={back} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
-      <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
+      <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 m-4 bg-white">
         <Text className="text-2xl font-bold">Crop Form</Text>
         <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
@@ -135,7 +138,6 @@ export default function CropForm({ navigation }) {
               setisCheckedPrev(e);
               handlePrevCheck(e);
             }}
-          // color={isChecked ? '#4630EB' : undefined}
           />
           <Text className="text-xs">Fill from previous data</Text>
         </View>
@@ -206,26 +208,21 @@ export default function CropForm({ navigation }) {
             value={isCheckedCurr}
             onValueChange={(e) => {
               setisCheckedCurr(e);
-              handleCurrCheck(e); // Call your function when the value changes
+              handleCurrCheck(e);
             }}
-          // color={isChecked ? '#4630EB' : undefined}
           />
           <Text style={styles.paragraph}>Add this soil information as my current information</Text>
         </View>
         <Button title='submit' color="#007F73" onPress={handleSubmit}>Submit</Button>
       </KeyboardAvoidingView>
 
-      <ScrollView>
+      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
         {cropData.map((i, index) => {
-          console.log("map",i);
-          const filteredCrop = crop_json.some(crop => crop.name === i.crop)
-          
-          console.log("filter",filteredCrop);
           return (
             <RecentPredictedCrop
-              key={index}
-              crop={filteredCrop}
-              data={i}
+              key={i.data._id}
+              crop={{"name":i.name, "img":i.img}}
+              data={i.data}
               setCropName={setCropName}
               setNitrogen={setNitrogen}
               setPhosphorous={setPhosphorous}
