@@ -75,7 +75,7 @@ export default function CropForm({ navigation }) {
       showToast(data);
     }
     else {
-      console.log("failed adding soil history as current");
+      showToast("failed adding soil history as current");
     }
   }
 
