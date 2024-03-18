@@ -56,13 +56,13 @@ export const submitSoil = async (token, nitrogen, phosphorous, potassium, temper
     }
 }
 
-export const submitCrop = async (token, cropname,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph) => {
+export const submitCrop = async (token, cropname ,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph) => {
     try {
         const headers = {
             "authorization": `Bearer ${token}`
         };
         const data = await axios.post(API + 'recent/submit_crop', { cropname,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph },{headers});
-        console.log(data.data);
+        // console.log("from backed",data);
         if (data.data) {
             return data.data;
         }

@@ -62,7 +62,7 @@ export default function Home({ navigation }) {
       Alert.alert("Failed", data)
     }
   }
-  
+
 
   const handle_crop_search = async () => {
     const cropNames = crop_json.map(crop => crop.name);
@@ -71,7 +71,7 @@ export default function Home({ navigation }) {
     if (data != null && data.crop) {
       setSearch("");
       handlesearch();
-      const response =await search_crop(matches.bestMatch.target);
+      const response = await search_crop(matches.bestMatch.target);
       if (response != null) {
         navigation.navigate("Predict", { crop: response })
       }
@@ -196,19 +196,21 @@ export default function Home({ navigation }) {
             <ScrollView showsHorizontalScrollIndicator={false} style={{ width: '90.33%' }}>
               {
                 news.map((e) => {
-                  const words = e.description.split(' ');
-                  const displayedDescription = words.length > 10 ? `${words.slice(0, 10).join(' ')}...` : e.description;
-                  return (
-                    <TouchableOpacity key={e.article_id} style={{ elevation: 10, overflow: "hidden", height: 100, margin: 3, padding: 1, width: '100%', alignItems: 'flex-start', borderRadius: 10, backgroundColor: '#C6F6D5' }} onPress={() => Linking.openURL(e.link)} activeOpacity={0.7} >
-                      <View style={{ width: '100%', height: '100%', flexDirection: 'row' }}>
-                        {e.image_url ? <Image source={{ uri: e.image_url }} style={{ borderRadius: 10, height: '100%', width: '33.33%' }} /> : <Image source={farmbg} style={{ borderRadius: 10, height: '100%', width: '33.33%' }} />}
-                        <View className="flex items-center" style={{ height: '100%', width: '66.67%', padding: 1, justifyContent: 'space-around' }}>
-                          <Text style={{ color: 'black', flexShrink: 1, fontWeight: 'bold', textAlign: 'center' }}>{e.title}</Text>
-                          <Text className="text-xs text-slate-600 font-bold" style={{ flexShrink: 1, textAlign: 'center' }}>{displayedDescription}</Text>
+                  if (e.description) {
+                    const words = e.description ? e.description.split(' ') : e.description;
+                    const displayedDescription = words.length > 10 ? `${words.slice(0, 10).join(' ')}...` : e.description;
+                    return (
+                      <TouchableOpacity key={e.article_id} style={{ elevation: 10, overflow: "hidden", height: 100, margin: 3, padding: 1, width: '100%', alignItems: 'flex-start', borderRadius: 10, backgroundColor: '#C6F6D5' }} onPress={() => Linking.openURL(e.link)} activeOpacity={0.7} >
+                        <View style={{ width: '100%', height: '100%', flexDirection: 'row' }}>
+                          {e.image_url ? <Image source={{ uri: e.image_url }} style={{ borderRadius: 10, height: '100%', width: '33.33%' }} /> : <Image source={farmbg} style={{ borderRadius: 10, height: '100%', width: '33.33%' }} />}
+                          <View className="flex items-center" style={{ height: '100%', width: '66.67%', padding: 1, justifyContent: 'space-around' }}>
+                            <Text style={{ color: 'black', flexShrink: 1, fontWeight: 'bold', textAlign: 'center' }}>{e.title}</Text>
+                            <Text className="text-xs text-slate-600 font-bold" style={{ flexShrink: 1, textAlign: 'center' }}>{displayedDescription}</Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                  )
+                      </TouchableOpacity>
+                    )
+                  }
                 })
               }
             </ScrollView>
