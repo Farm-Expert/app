@@ -16,6 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProfileimage } from '../redux/Auth';
+import { TextInput } from 'react-native';
 
 export default function Profile({ navigation }) {
     const [Nitrogen, setNitrogen] = useState("");
@@ -26,8 +27,14 @@ export default function Profile({ navigation }) {
     const [Rainfall, setRainfall] = useState("");
     const [pH, setPH] = useState("");
     const [imgsrc, setImgSrc] = useState(useSelector(state => state.profile_img));
-    const user_data=useSelector(state => state.value)
+    const user_data = useSelector(state => state.value)
     const dispatch = useDispatch();
+    const [editMode, setEditMode] = useState(false);
+    const [name, setName] = useState(user_data.payload.user.name);
+    const [mobile, setMobile] = useState(user_data.payload.user.mobile);
+    const [address, setAddress] = useState(user_data.payload.user.address);
+    const [email, setEmail] = useState(user_data.payload.user.email);
+    const [kisanId, setKisanId] = useState(user_data.payload.user.kisanid);
     function showToast(message) {
         ToastAndroid.show(message, ToastAndroid.SHORT);
     }
@@ -48,6 +55,44 @@ export default function Profile({ navigation }) {
         setPH(Number(user_data.payload.user.ph));
     }, []);
 
+    const toggleEditMode = () => {
+        setEditMode(!editMode);
+    };
+
+    // Function to save changes
+    const saveChanges = async () => {
+        // Update profile here with the new data
+        try {
+            const data = await updateProfile(
+                user_data.payload.token,
+                name,
+                mobile,
+                address,
+                kisanId,
+                email
+            );
+            if (data) {
+                showToast('Profile updated successfully!');
+                toggleEditMode(); // Exit edit mode after saving changes
+            } else {
+                showToast('Failed to update profile');
+            }
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            showToast('Failed to update profile');
+        }
+    };
+
+    const discardChanges = () => {
+        // Reset fields to original values
+        setName(user_data.payload.user.name);
+        setMobile(user_data.payload.user.mobile);
+        setAddress(user_data.payload.user.address);
+        setEmail(user_data.payload.user.email);
+        setKisanId(user_data.payload.user.kisanid);
+        toggleEditMode(); // Exit edit mode
+    };
+
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -63,15 +108,15 @@ export default function Profile({ navigation }) {
             try {
                 await uploadBytes(storageRef, blob)
                 showToast('Image uploaded successfully!')
-                const img_URL=await getDownloadURL(storageRef)
+                const img_URL = await getDownloadURL(storageRef)
                 dispatch(addProfileimage(img_URL));
                 setImgSrc(img_URL);
-                const data=await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, img_URL)
-                if(data){
-                    console.log("profile updated",img_URL);
-                    console.log("profile updated done",user_data.payload.user.profileimg);
+                const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address, user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, img_URL)
+                if (data) {
+                    console.log("profile updated", img_URL);
+                    console.log("profile updated done", user_data.payload.user.profileimg);
                 }
-                else{
+                else {
                     console.log("failed updating profile");
                 }
             } catch (error) {
@@ -80,11 +125,11 @@ export default function Profile({ navigation }) {
         }
     };
 
-    
 
-    const share=()=>{
+
+    const share = () => {
         console.log("share")
-        const profile_link=`http://myfarmexpert.tech:5050/share/${user_data.payload.token}`
+        const profile_link = `http://myfarmexpert.tech:5050/share/${user_data.payload.token}`
         console.log(profile_link);
         console.log(user_data.payload.user);
         Clipboard.setString(profile_link);
@@ -110,7 +155,25 @@ export default function Profile({ navigation }) {
             <View className="bg-transparent rounded-full mb-4 overflow-hidden" style={{ width: 110, height: 110 }}>
                 <Image source={{ uri: imgsrc }} className="w-full h-full" />
             </View>
-            <Text className="mb-4 font-extrabold text-white text-lg">Hi {user_data.payload.user.name}</Text>
+            {editMode ? ( // Render TextInput with edit icon when editMode is true
+                <View className=" flex justify-center" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TextInput
+                        style={{ flex: 1, fontSize: 18, color: 'white' }}
+                        value={name}
+                        onChangeText={setName}
+                        placeholder="Enter your name"
+                        placeholderTextColor="gray"
+                    />
+                    <TouchableOpacity>
+                        <AntDesign name="edit" size={24} color="white" />
+                    </TouchableOpacity>
+                </View>
+            ) : ( // Render Text field when editMode is false
+                <Text style={{ marginBottom: 4, fontWeight: 'bold', fontSize: 20, color: 'white' }}>
+                    Hi {user_data.payload.user.name}
+                </Text>
+            )}
+            {/* <TextInput></TextInput> */}
             <View style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50, backgroundColor: "#ffffff60" }} className="flex justify-start items-center w-screen h-full">
                 <View className="w-full flex flex-row mb-6 mt-6 justify-around items-center">
                     <View>
@@ -124,7 +187,7 @@ export default function Profile({ navigation }) {
                         <View className="flex flex-row items-center justify-center gap-1">
                             <Entypo name="phone" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Mobile No.</Text>
-                            
+
                         </View>
                         <Text className="text-center">+91 {user_data.payload.user.mobile}</Text>
                     </View>
@@ -152,9 +215,10 @@ export default function Profile({ navigation }) {
                 <View style={{ width: "90%" }} className="">
                     <View className="h-16 rounded-full mb-6 mt-7 overflow-hidden flex flex-row justify-around items-center w-full bg-green-100">
                         <View className="flex items-center justify-center flex-1">
-                            <TouchableOpacity className="w-full h-full flex items-center justify-center">
+                            <TouchableOpacity className="w-full h-full flex items-center justify-center" onPress={toggleEditMode}>
                                 <AntDesign name="edit" size={24} color="black" />
                                 <Text className="font-bold">Edit</Text>
+
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
@@ -189,6 +253,24 @@ export default function Profile({ navigation }) {
                     </ScrollView>
                 </View>
             </View>
+            {/* Edit mode toggle button */}
+            {!editMode && (
+                <TouchableOpacity onPress={toggleEditMode} style={styles.editButton}>
+                    <FontAwesome5 name="edit" size={24} color="white" />
+                </TouchableOpacity>
+            )}
+
+            {/* Save and Discard buttons */}
+            {editMode && (
+                <View style={styles.editButtonsContainer}>
+                    <TouchableOpacity onPress={saveChanges} style={[styles.editButton, { backgroundColor: 'green' }]}>
+                        <Text style={styles.editButtonText}>Save</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={discardChanges} style={[styles.editButton, { backgroundColor: 'red' }]}>
+                        <Text style={styles.editButtonText}>Discard</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
 
         </ImageBackground>
     );
@@ -202,5 +284,35 @@ const styles = StyleSheet.create({
         resizeMode: 'cover',
         paddingHorizontal: 30,
         alignItems: "center"
+    },
+    editButton: {
+        position: 'absolute',
+        top: 12,
+        right: 10,
+        zIndex: 40,
+        backgroundColor: 'transparent',
+    },
+
+    // Container for Save and Discard buttons
+    editButtonsContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+
+    // Style for Save and Discard buttons
+    editButton: {
+        width: '45%',
+        paddingVertical: 10,
+        borderRadius: 5,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    // Style for text inside Save and Discard buttons
+    editButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: 'bold',
     },
 });

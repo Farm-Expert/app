@@ -14,7 +14,18 @@ const Plant_Disease = ({ navigation }) => {
   const showToast = (message) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
-
+  const handleUpload = async () => {
+    // const data = await submitDisease(user_data.payload.token, imgSrc)
+    // if (data) {
+      console.log(imgSrc,"Plant Disease");
+      navigation.navigate("PredictDisease",{img: imgSrc})
+      
+    //   Alert.alert(data)
+    // }
+    // else {
+    //   Alert.alert("Failed")
+    // }
+  }
   useEffect(() => {
     (async () => {
       const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -93,7 +104,7 @@ const Plant_Disease = ({ navigation }) => {
           style={styles.uploadButton}
           onPress={upload_image}
         >
-          <Text className="text-xl font-bold text-white text-center">Upload Image</Text>
+          <Text className="text-xl font-bold text-white text-center" title="upload" onPress={handleUpload}>Upload Image</Text>
         </TouchableOpacity>
       </View>
       <View className="flex-1 mt-4, rounded-tl-xl rounded-tr-xl" style={{backgroundColor:"#ffffff70"}}>
