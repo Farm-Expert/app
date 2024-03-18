@@ -16,7 +16,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProfileimage } from '../redux/Auth';
-import { TextInput } from 'react-native-gesture-handler';
+import { TextInput } from 'react-native';
 
 export default function Profile({ navigation }) {
     const [Nitrogen, setNitrogen] = useState("");
@@ -155,7 +155,24 @@ export default function Profile({ navigation }) {
             <View className="bg-transparent rounded-full mb-4 overflow-hidden" style={{ width: 110, height: 110 }}>
                 <Image source={{ uri: imgsrc }} className="w-full h-full" />
             </View>
-            <Text className="mb-4 font-extrabold text-white text-lg">Hi {user_data.payload.user.name}</Text>
+            {editMode ? ( // Render TextInput with edit icon when editMode is true
+                <View className=" flex justify-center" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <TextInput
+                        style={{ flex: 1, fontSize: 18, color: 'white' }}
+                        value={name}
+                        onChangeText={setName}
+                        placeholder="Enter your name"
+                        placeholderTextColor="gray"
+                    />
+                    <TouchableOpacity>
+                        <AntDesign name="edit" size={24} color="white" />
+                    </TouchableOpacity>
+                </View>
+            ) : ( // Render Text field when editMode is false
+                <Text style={{ marginBottom: 4, fontWeight: 'bold', fontSize: 20, color: 'white' }}>
+                    Hi {user_data.payload.user.name}
+                </Text>
+            )}
             {/* <TextInput></TextInput> */}
             <View style={{ borderTopLeftRadius: 50, borderTopRightRadius: 50, backgroundColor: "#ffffff60" }} className="flex justify-start items-center w-screen h-full">
                 <View className="w-full flex flex-row mb-6 mt-6 justify-around items-center">
@@ -170,7 +187,7 @@ export default function Profile({ navigation }) {
                         <View className="flex flex-row items-center justify-center gap-1">
                             <Entypo name="phone" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Mobile No.</Text>
-                            
+
                         </View>
                         <Text className="text-center">+91 {user_data.payload.user.mobile}</Text>
                     </View>
@@ -201,7 +218,7 @@ export default function Profile({ navigation }) {
                             <TouchableOpacity className="w-full h-full flex items-center justify-center" onPress={toggleEditMode}>
                                 <AntDesign name="edit" size={24} color="black" />
                                 <Text className="font-bold">Edit</Text>
-                                
+
                             </TouchableOpacity>
                         </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>

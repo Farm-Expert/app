@@ -17,7 +17,9 @@ const Plant_Disease = ({ navigation }) => {
   const handleUpload = async () => {
     // const data = await submitDisease(user_data.payload.token, imgSrc)
     // if (data) {
+      console.log(imgSrc,"Plant Disease");
       navigation.navigate("PredictDisease",{img: imgSrc})
+      
     //   Alert.alert(data)
     // }
     // else {
