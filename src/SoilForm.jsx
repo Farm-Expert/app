@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
-import { Alert } from 'react-native';
 import { recentSoilForm, submitSoil } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
 import back from "../assets/back.png";
-// import RecentPredictedCrop from './comp/recentPredictedCrop';
 import crop_json from './data/crop_json';
 
 export default function SoilForm({navigation}) {
@@ -77,9 +75,7 @@ export default function SoilForm({navigation}) {
 
   const handlePrevCheck=(e)=>{
     if(e){
-      // profile se get wali api
       getPrevData();
-      // getRecentSoil();
     }
     else handleRefresh();
   }

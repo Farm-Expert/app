@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
-import { Alert } from 'react-native';
 import { recentCropForm, submitCrop } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
@@ -149,7 +148,6 @@ export default function CropForm({ navigation }) {
             value={Cropname}
             onChangeText={(e) => setCropName(e)}
             keyboardType="default"
-
           />
           <TextInput
             style={styles.input}
@@ -157,7 +155,6 @@ export default function CropForm({ navigation }) {
             value={Nitrogen}
             onChangeText={(e) => setNitrogen(e)}
             keyboardType="numeric"
-
           />
           <TextInput
             style={styles.input}

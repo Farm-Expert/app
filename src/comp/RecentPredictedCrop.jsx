@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 
-export default function RecentPredictedCrop({crop,data,setCropname, setNitrogen, setPhosphorous, setPotassium, setTemperature, setHumidity, setRainfall, setPH ,navigation}) {
+export default function RecentPredictedCrop({crop,data,setCropName, setNitrogen, setPhosphorous, setPotassium, setTemperature, setHumidity, setRainfall, setPH ,navigation}) {
 
     const handleClick =()=>{
-        setCropname(crop.name);
-        setNitrogen(data.nitrogen);
-        setPhosphorous(data.phosphorous);
-        setPotassium(data.potassium);
-        setTemperature(data.temperature);
-        setHumidity(data.humidity);
-        setRainfall(data.rainfall);
-        setPH(data.ph);
+        setCropName(`${crop.name}`);
+        setNitrogen(`${data.nitrogen}`);
+        setPhosphorous(`${data.phosphorous}`);
+        setPotassium(`${data.potassium}`);
+        setTemperature(`${data.temperature}`);
+        setHumidity(`${data.humidity}`);
+        setRainfall(`${data.rainfall}`);
+        setPH(`${data.ph}`);
     }
 
     return (
