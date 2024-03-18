@@ -56,13 +56,13 @@ export const submitSoil = async (token, nitrogen, phosphorous, potassium, temper
     }
 }
 
-export const submitCrop = async (token, cropname,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph) => {
+export const submitCrop = async (token, cropname ,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph) => {
     try {
         const headers = {
             "authorization": `Bearer ${token}`
         };
         const data = await axios.post(API + 'recent/submit_crop', { cropname,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph },{headers});
-        console.log(data.data);
+        // console.log("from backed",data);
         if (data.data) {
             return data.data;
         }
@@ -108,6 +108,36 @@ export const recentSoilForm = async (token) => {
         }
         else {
             console.log("failed");
+            return null
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const search_crop=async (cropname)=>{
+    try {
+        const data = await axios.post("http://13.201.75.117:8000/search_crop", { search: cropname });
+        if (data.data.status=="success") {
+            return data.data;
+        }
+        else {
+            return null
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const chat_agro=async (message)=>{
+    try {
+        const data = await axios.post("http://13.201.75.117:8000/chat", { message: message });
+        if (data.data.res) {
+            data.data.res=data.data.res.replace(/\*/g, '');
+            data.data.res=data.data.res.replace(/Sure, .* :/, ' ');
+            return data.data.res;
+        }
+        else {
             return null
         }
     } catch (error) {

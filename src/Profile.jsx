@@ -170,6 +170,7 @@ export default function Profile({ navigation }) {
                         <View className="flex flex-row items-center justify-center gap-1">
                             <Entypo name="phone" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Mobile No.</Text>
+                            
                         </View>
                         <Text className="text-center">+91 {user_data.payload.user.mobile}</Text>
                     </View>

@@ -45,7 +45,7 @@ export default function Signup({ navigation }) {
             showToast("Failed: Mobile number should be 10 digits long")
             return
         }
-        else if(KisanID.length!=10){
+        else if(KisanID.length!=12){
             showToast("Failed: KisanID number should be 12 digits long")
             return
         }

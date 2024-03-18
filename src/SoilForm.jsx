@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView } from 'react-native';
+import { useState } from 'react';
+import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
-import { Alert } from 'react-native';
 import { recentSoilForm, submitSoil } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
-import back from "../assets/back.png"
+import back from "../assets/back.png";
+import crop_json from './data/crop_json';
 
 export default function SoilForm({navigation}) {
   const [Nitrogen, setNitrogen] = useState("");
@@ -21,45 +21,39 @@ export default function SoilForm({navigation}) {
   const [isCheckedCurr, setisCheckedCurr] = useState(false);
   const user_data=useSelector(state => state.value);
 
+  function showToast(message) {
+    ToastAndroid.show(message, ToastAndroid.SHORT);
+  }
+
   // to store all soil history
   const handleSubmit = async () => {
+    if (Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
     const data = await submitSoil(user_data.payload.token, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
     if (data) {
-      // navigation.navigate("Predict")
-      Alert.alert(data)
+      showToast(data);
+      handleRefresh();
     }
     else {
-      Alert.alert("Failed")
+      showToast("Failed");
     }
+  }
   }
 
   // to store soil history as curr ie in profile
   const handleSoilFormHistory = async () => {
     const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
-    // console.log("curr",data);
+    console.log("curr",data);
     if(data){
-      console.log("soil history set as curr",data);
+      showToast(data);
     }
     else{
-      console.log("failed adding curr");
+      showToast("failed adding soil history as current");
     }
   }
 
   // to get soil history
   const getRecentSoil = async () => {
     const data = await recentSoilForm(user_data.payload.token);
-    // console.log("get",data);
-    // console.log("nit",data.nitrogen);
-    if(data){
-      console.log("get soil (prev)",data);
-      setNitrogen(data.nitrogen);
-      setPhosphorous(data.phosphorous);
-      setPotassium(data.potassium);
-      setHumidity(data.humidity);
-      setTemperature(data.temperature);
-      setRainfall(data.rainfall);
-      setPH(data.ph);
-    }
   }
 
   const getPrevData = async () => {
@@ -81,9 +75,7 @@ export default function SoilForm({navigation}) {
 
   const handlePrevCheck=(e)=>{
     if(e){
-      // profile se get wali api
       getPrevData();
-      // getRecentSoil();
     }
     else handleRefresh();
   }
@@ -112,7 +104,7 @@ export default function SoilForm({navigation}) {
       </TouchableOpacity>
 
       <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
-        <Text className="text-2xl font-bold">Soil Information</Text>
+        <Text className="text-2xl font-bold">Soil Form</Text>
         <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
             style={styles.checkbox}
@@ -121,7 +113,6 @@ export default function SoilForm({navigation}) {
               setisCheckedPrev(e);
               handlePrevCheck(e);
             }}
-          // color={isChecked ? '#4630EB' : undefined}
           />
           <Text className="text-xs">Fill from previous data</Text>
         </View>
@@ -184,19 +175,13 @@ export default function SoilForm({navigation}) {
             value={isCheckedCurr}
             onValueChange={(e) => {
               setisCheckedCurr(e);
-              handleCurrCheck(e); // Call your function when the value changes
+              handleCurrCheck(e);
             }}
-          // color={isChecked ? '#4630EB' : undefined}
           />
           <Text style={styles.paragraph}>Add this soil information as my current information</Text>
         </View>
-        <Button title='submit' color="#007F73" onPress={handleSubmit}>Secondary</Button>
+        <Button title='submit' color="#007F73" onPress={handleSubmit}>Submit</Button>
       </KeyboardAvoidingView>
-
-      {/* <Scroll/> */}
-      <ScrollView>
-
-      </ScrollView>
 
     </ImageBackground>
   );
