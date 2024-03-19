@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://myfarmexpert.tech:5050/"
+const API = "https://farm-expert-app-backend-beige.vercel.app/"
 
 
 export const recentCrop = async (token) => {
@@ -117,7 +117,7 @@ export const recentSoilForm = async (token) => {
 
 export const search_crop=async (cropname)=>{
     try {
-        const data = await axios.post("http://13.201.75.117:8000/search_crop", { search: cropname });
+        const data = await axios.post("https://search-crop.onrender.com/search_crop", { search: cropname });
         if (data.data.status=="success") {
             return data.data;
         }
@@ -131,7 +131,7 @@ export const search_crop=async (cropname)=>{
 
 export const chat_agro=async (message)=>{
     try {
-        const data = await axios.post("http://13.201.75.117:8000/chat", { message: message });
+        const data = await axios.post("https://search-crop.onrender.com/chat", { message: message });
         if (data.data.res) {
             data.data.res=data.data.res.replace(/\*/g, '');
             data.data.res=data.data.res.replace(/Sure, .* :/, ' ');
