@@ -1,7 +1,6 @@
 import axios from "axios";
-import { Alert } from "react-native";
 
-const API="http://myfarmexpert.tech:5050/"
+const API="https://farm-expert-app-backend-beige.vercel.app/"
 
 
 export const signup = async (name, email, mobile, password, address, kisanid ) => {
