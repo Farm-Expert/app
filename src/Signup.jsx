@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity, KeyboardAvoidingView, ToastAndroid } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
+import { Feather,Entypo } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { signup } from './auth/auth';
@@ -106,7 +106,7 @@ export default function Signup({ navigation }) {
                     ></TextInput>
                 </View>
                 <View style={styles.inputbox}>
-                    <MaterialCommunityIcons name="kisan-id" size={24} color={kisanidfocus === true ? "red" : "black"} />
+                    <AntDesign name="idcard" size={24} color={kisanidfocus === true ? "red" : "black"} />
                     <TextInput style={styles.input} placeholder='KisanID'
                         value={KisanID}
                         onChangeText={(e) => setKisanID(e)}
@@ -140,7 +140,7 @@ export default function Signup({ navigation }) {
                     ></TextInput>
                 </View>
                 <View style={styles.inputbox}>
-                    <MaterialCommunityIcons name="address" size={24} color={adressfocus === true ? "red" : "black"} />
+                    <Entypo name="address" size={24} color={adressfocus === true ? "red" : "black"} />
                     <TextInput style={styles.input} placeholder='Address'
                         value={Address}
                         onChangeText={(e) => setAddress(e)}
