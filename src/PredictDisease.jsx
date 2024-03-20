@@ -9,24 +9,35 @@ import { diseasePredict } from './auth/ml_api';
 export default function PredictDisease({ navigation, route }) {
   console.log(route.params);
   const diseaseImg = route.params.img;
-  const [name, setName]=useState("");
-  const [plantName, setPlantName]=useState("");
-  const [precautions,setPrecautions]= useState([]);
-  const [symptoms,setSymptoms]= useState([]);
-  const [treatment,setTreatment]= useState([]);
+  const [name, setName] = useState("");
+  const [plantName, setPlantName] = useState("");
+  const [precautions, setPrecautions] = useState([]);
+  const [symptoms, setSymptoms] = useState([]);
+  const [treatment, setTreatment] = useState([]);
+  const [show, setShow] = useState(true)
+  const [msg, setMsg] = useState("");
   // console.log(diseaseImg, "Predict Disease");
   useEffect(() => {
     handleDisease();
   }, [])
   const handleDisease = async () => {
-    const data = await diseasePredict("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnuwXIC8XWUG4JByPU7FteFFro1TWkw4Nuig&s");
+    const data = await diseasePredict(diseaseImg);
     console.log(data, "predict data")
-    if(data){
+    if (data && data.success) {
+      setShow(true);
       setName(data.disease_name);
       setPlantName(data.plant_name);
       setPrecautions(data.precautions);
       setSymptoms(data.symptoms);
       setTreatment(data.treatment);
+    }
+    else {
+      setShow(false);
+      setName('No disease detected');
+      setPlantName('');
+      setPrecautions('');
+      setSymptoms('');
+      setTreatment('');
     }
   }
 
@@ -41,27 +52,36 @@ export default function PredictDisease({ navigation, route }) {
           <Image source={{ uri: diseaseImg }} className="rounded-full h-full w-full m-0 p-0" style={styles.diseaseimg} />
         </View>
       </View>
-      <Text className="text-white w-full -mt-5 font-bold text-center text-3xl">{name}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("disease")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-12">
-        <Image source={back} style={{ width: 20, height: 20 }} />
-      </TouchableOpacity>
-      <View className="p-3 w-screen m-3 items-center justify-center h-full" style={{ backgroundColor: '#ffffff60', borderTopLeftRadius: 50, borderTopRightRadius: 50 }}>
-        <ScrollView   bouncesZoom={true} showsVerticalScrollIndicator={false} bounces={true}>
-          <Text className="text-white w-full font-bold text-center text-xl">{plantName}</Text>
-          <View style={{ height: 2 }} className=" items-center w-1.3 bg-white m-2"></View>
-          {/* Here Precuations and cure display */}
-          {/* {precautions.map((item,i)=>{
+      {show ? (
+        <>
+          <Text className="text-white w-full -mt-5 font-bold text-center text-3xl">{name}</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("disease")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-12">
+            <Image source={back} style={{ width: 20, height: 20 }} />
+          </TouchableOpacity>
+          <View className="p-3 w-screen m-3 items-center justify-center h-full" style={{ backgroundColor: '#ffffff60', borderTopLeftRadius: 50, borderTopRightRadius: 50 }}>
+
+            <ScrollView bouncesZoom={true} showsVerticalScrollIndicator={false} bounces={true}>
+              <Text className="text-white w-full font-bold text-center text-xl">{plantName}</Text>
+              <View style={{ height: 2 }} className=" items-center w-1.3 bg-white m-2"></View>
+              {/* Here Precuations and cure display */}
+              {/* {precautions.map((item,i)=>{
             return (
               <DiseaseScroll key={i} value={item}></DiseaseScroll>
             )
           })} */}
-          <View className=" flex flex-col justify-center items-center m-2 ">
-          <DiseaseScroll value={precautions} title="Precautions" />
-          <DiseaseScroll value={symptoms} title="Symptoms" />
-          <DiseaseScroll value={treatment} title="Treatment" /> 
+              <View className=" flex flex-col justify-center items-center m-2 ">
+                <DiseaseScroll value={precautions} title="Precautions" />
+                <DiseaseScroll value={symptoms} title="Symptoms" />
+                <DiseaseScroll value={treatment} title="Treatment" />
+              </View>
+            </ScrollView>
+
           </View>
-        </ScrollView>
-      </View>
+        </>
+      ) :
+        (
+          <Text className="text-white w-full -mt-5 font-bold text-center text-3xl">{name}</Text>
+        )}
 
       {/* we can also add correct soil conditions to grow the crop */}
 
