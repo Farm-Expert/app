@@ -2,7 +2,6 @@ import axios from "axios";
 
 const API="https://farm-expert-app-backend-beige.vercel.app/"
 
-
 export const signup = async (name, email, mobile, password, address, kisanid ) => {
     try {
         const data = await axios.post(API+'auth/signup', { name, email, mobile, password, address, kisanid });
