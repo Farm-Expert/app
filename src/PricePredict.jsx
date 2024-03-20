@@ -13,6 +13,7 @@ import { EvilIcons } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import PriceSuggestionCrop from './comp/PriceSuggestionCrop';
 import PriceSuggestionLocation from './comp/PriceSuggestionLocation';
+import { diseasePredict, pricePredict } from './auth/ml_api';
 
 export default function PricePredict({ navigation }) {
 
@@ -45,7 +46,11 @@ export default function PricePredict({ navigation }) {
 
     const handlePredict = async () => {
         console.log("predict");
+        const data = await pricePredict("mango", "indore");
+        // const data1 = await diseasePredict("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGPutPjeeswgPGpoVYE7SfBSOKChl_FCB1zA&s");
+        // const data2 = await diseasePredict("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnuwXIC8XWUG4JByPU7FteFFro1TWkw4Nuig&s")
     }
+    
 
     return (
         <ImageBackground
