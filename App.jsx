@@ -14,6 +14,7 @@ import Signup from './src/Signup';
 import Plant_Disease from './src/Plant_Disease';
 import ChatScreen from './src/chatbot';
 import PredictDisease from './src/PredictDisease';
+import  PricePredict  from './src/PricePredict';
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
           <Stack.Screen name="Soil" component={SoilForm} options={{ headerShown: false }} />
           <Stack.Screen name="Crop" component={CropForm} options={{ headerShown: false }} />
           <Stack.Screen name="disease" component={Plant_Disease} options={{ headerShown: false }} />
+          <Stack.Screen name="price" component={PricePredict} options={{ headerShown: false }} />
           <Stack.Screen name="chatbot" component={ChatScreen} options={{ headerShown: false }} />
           <Stack.Screen name="PredictDisease" component={PredictDisease} options={{ headerShown: false }} />
         </Stack.Navigator>

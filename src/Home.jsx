@@ -13,6 +13,7 @@ import * as Speech from 'expo-speech';
 import { add_recentCrop, recentCrop, search_crop } from './auth/recent';
 import { useSelector } from 'react-redux';
 import crop_json from './data/crop_json';
+import price from '../assets/price.jpg'
 
 
 export default function Home({ navigation }) {
@@ -173,6 +174,17 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">for predicting plant disease</Text>
                 </View>
               </TouchableOpacity>
+              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("price")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+                <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+                  <Image source={price} className="rounded-3xl h-full w-full" />
+                </View>
+                <View className='w-full h-1/6' >
+                  <Text className="text-black font-bold text-center">Crop Price Prediction</Text>
+                  <Text className="text-center text-slate-500 text-xs">for predicting crop price</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View className="flex w-screen px-4 pt-2 flex-row items-start justify-center gap-2">
               <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("chatbot")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={chatbot} className="rounded-3xl h-full w-full" />

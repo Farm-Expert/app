@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
 import back from "../assets/back.png";
 import crop_json from './data/crop_json';
-import RecentPredictedCrop from './comp/RecentPredictedCrop';
+import RecentPredictedCrop from './comp/recentPredictedCrop';
 import stringSimilarity from 'string-similarity';
 
 export default function CropForm({ navigation }) {
