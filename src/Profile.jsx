@@ -33,7 +33,6 @@ export default function Profile({ navigation }) {
     const [name, setName] = useState(user_data.payload.user.name);
     const [mobile, setMobile] = useState(user_data.payload.user.mobile);
     const [address, setAddress] = useState(user_data.payload.user.address);
-    const [email, setEmail] = useState(user_data.payload.user.email);
     const [kisanId, setKisanId] = useState(user_data.payload.user.kisanid);
     function showToast(message) {
         ToastAndroid.show(message, ToastAndroid.SHORT);
@@ -64,14 +63,13 @@ export default function Profile({ navigation }) {
         // Update profile here with the new data
         try {
             const data = await updateProfile(
-                user_data.payload.token,
-                name,
-                mobile,
-                address,
-                kisanId,
-                email
+                user_data.payload.token, name, mobile, address, kisanId, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH
             );
             if (data) {
+                setName(name);
+                setMobile(mobile);
+                setAddress(address);
+                setKisanId(kisanId);
                 showToast('Profile updated successfully!');
                 toggleEditMode(); // Exit edit mode after saving changes
             } else {
@@ -88,7 +86,6 @@ export default function Profile({ navigation }) {
         setName(user_data.payload.user.name);
         setMobile(user_data.payload.user.mobile);
         setAddress(user_data.payload.user.address);
-        setEmail(user_data.payload.user.email);
         setKisanId(user_data.payload.user.kisanid);
         toggleEditMode(); // Exit edit mode
     };
@@ -158,7 +155,7 @@ export default function Profile({ navigation }) {
             {editMode ? ( // Render TextInput with edit icon when editMode is true
                 <View className=" flex justify-center" style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TextInput
-                        style={{ flex: 1, fontSize: 18, color: 'white' }}
+                        style={{ marginBottom: 4, fontWeight: 'bold', fontSize: 20, color: 'white' }}
                         value={name}
                         onChangeText={setName}
                         placeholder="Enter your name"
@@ -183,13 +180,27 @@ export default function Profile({ navigation }) {
                         </View>
                         <Text className="text-center">{user_data.payload.user.email}</Text>
                     </View>
+
                     <View>
                         <View className="flex flex-row items-center justify-center gap-1">
                             <Entypo name="phone" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Mobile No.</Text>
-
                         </View>
-                        <Text className="text-center">+91 {user_data.payload.user.mobile}</Text>
+                        {editMode ? ( // Render TextInput with edit icon when editMode is true
+                            <View className=" flex justify-center" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TextInput
+                                    value={mobile.toString()}
+                                    onChangeText={setMobile}
+                                    placeholder="Enter your Number"
+                                    placeholderTextColor="gray"
+                                />
+                                <TouchableOpacity>
+                                    <AntDesign name="edit" size={20} />
+                                </TouchableOpacity>
+                            </View>
+                        ) : ( // Render Text field when editMode is false
+                            <Text className="text-center">{user_data.payload.user.mobile}</Text>
+                        )}
                     </View>
                 </View>
                 <View className="w-full flex flex-row mb-6 justify-around items-center">
@@ -198,7 +209,21 @@ export default function Profile({ navigation }) {
                             <AntDesign name="idcard" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">PM-Kisan farmer ID</Text>
                         </View>
-                        <Text className="text-center">{user_data.payload.user.kisanid}</Text>
+                        {editMode ? ( // Render TextInput with edit icon when editMode is true
+                            <View className=" flex justify-center" style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TextInput
+                                    value={kisanId.toString()}
+                                    onChangeText={setKisanId}
+                                    placeholder="Enter your KisanID"
+                                    placeholderTextColor="gray"
+                                />
+                                <TouchableOpacity>
+                                    <AntDesign name="edit" size={20} />
+                                </TouchableOpacity>
+                            </View>
+                        ) : ( // Render Text field when editMode is false
+                            <Text className="text-center">{user_data.payload.user.kisanid}</Text>
+                        )}
                     </View>
                 </View>
                 <View className="w-full flex flex-row mb-6 justify-around items-center">
@@ -207,7 +232,22 @@ export default function Profile({ navigation }) {
                             <FontAwesome name="address-book" size={24} color="black" />
                             <Text className="text-center text-xl font-bold">Address</Text>
                         </View>
-                        <Text className="text-center flex flex-wrap w-2/3">{user_data.payload.user.address}</Text>
+                        {editMode ? ( // Render TextInput with edit icon when editMode is true
+                            <View className=" flex flex-row items-center justify-center ">
+                                <TextInput
+                                    className="text-center"
+                                    value={address}
+                                    onChangeText={setAddress}
+                                    placeholder="Enter your email"
+                                    placeholderTextColor="gray"
+                                />
+                                <TouchableOpacity>
+                                    <AntDesign name="edit" size={20} />
+                                </TouchableOpacity>
+                            </View>
+                        ) : ( // Render Text field when editMode is false
+                            <Text className="text-center">{user_data.payload.user.address}</Text>
+                        )}
                     </View>
                 </View>
                 <View style={{ height: 2 }} className="w-2/3 bg-white"></View>
@@ -215,11 +255,31 @@ export default function Profile({ navigation }) {
                 <View style={{ width: "90%" }} className="">
                     <View className="h-16 rounded-full mb-6 mt-7 overflow-hidden flex flex-row justify-around items-center w-full bg-green-100">
                         <View className="flex items-center justify-center flex-1">
-                            <TouchableOpacity className="w-full h-full flex items-center justify-center" onPress={toggleEditMode}>
+                            {/* <TouchableOpacity className="w-full h-full flex items-center justify-center" onPress={toggleEditMode}>
                                 <AntDesign name="edit" size={24} color="black" />
                                 <Text className="font-bold">Edit</Text>
 
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
+                            {/* // Edit mode toggle button */}
+                            {!editMode && (
+                                <TouchableOpacity onPress={toggleEditMode} style={styles.editButton}>
+                                    <AntDesign name="edit" size={24} color="black" />
+                                    <Text className="font-bold">Edit</Text>
+                                </TouchableOpacity>
+                            )}
+
+                            {/* Save and Discard buttons */}
+                            {editMode && (
+                                <View style={styles.editButtonsContainer}>
+                                    <TouchableOpacity onPress={saveChanges} style={[styles.editButton, { backgroundColor: '#ffc61a' }]}>
+                                        <Text style={styles.editButtonText}>Save</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={discardChanges} style={[styles.editButton, { backgroundColor: '#ff8080' }]}>
+                                        <Text style={styles.editButtonText}>Discard</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            )}
+
                         </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
                         <View className="flex items-center justify-center flex-1">
@@ -253,26 +313,9 @@ export default function Profile({ navigation }) {
                     </ScrollView>
                 </View>
             </View>
-            {/* Edit mode toggle button */}
-            {!editMode && (
-                <TouchableOpacity onPress={toggleEditMode} style={styles.editButton}>
-                    <FontAwesome5 name="edit" size={24} color="white" />
-                </TouchableOpacity>
-            )}
 
-            {/* Save and Discard buttons */}
-            {editMode && (
-                <View style={styles.editButtonsContainer}>
-                    <TouchableOpacity onPress={saveChanges} style={[styles.editButton, { backgroundColor: 'green' }]}>
-                        <Text style={styles.editButtonText}>Save</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={discardChanges} style={[styles.editButton, { backgroundColor: 'red' }]}>
-                        <Text style={styles.editButtonText}>Discard</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
 
-        </ImageBackground>
+        </ImageBackground >
     );
 }
 
@@ -295,15 +338,17 @@ const styles = StyleSheet.create({
 
     // Container for Save and Discard buttons
     editButtonsContainer: {
-        flexDirection: 'row',
+        flexDirection: 'col',
         justifyContent: 'space-between',
-        marginTop: 20,
+        alignItems: 'center',
+        marginTop: 7,
+        marginBottom: 7,
+        gap: 5,
     },
 
     // Style for Save and Discard buttons
     editButton: {
-        width: '45%',
-        paddingVertical: 10,
+        width: '55%',
         borderRadius: 5,
         alignItems: 'center',
         justifyContent: 'center',
@@ -312,7 +357,8 @@ const styles = StyleSheet.create({
     // Style for text inside Save and Discard buttons
     editButtonText: {
         color: 'white',
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: 'bold',
+        padding: 5,
     },
 });
