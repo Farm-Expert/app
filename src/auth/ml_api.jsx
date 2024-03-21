@@ -33,3 +33,35 @@ export const diseasePredict = async (imgurl)=>{
         console.log(error);
     }
 }
+
+export const soilPredict = async (N, P, K, temperature, humidity, ph, rainfall, label)=>{
+    try {
+        console.log("back", N);
+        const data = await axios.post('https://crop-ai-backend.onrender.com/predict_soil', {N, P, K, temperature, humidity, ph, rainfall, label})
+        console.log("backkk",data);
+        if (data.data) {
+            console.log("backend soil",data.data);
+            return data.data;
+        }
+        else {
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const cropPredict = async (N, P, K, temperature, humidity, ph, rainfall)=>{
+    try {
+        const data = await axios.post('https://crop-ai-backend.onrender.com/predict_crop', {N, P, K, temperature, humidity, ph, rainfall})
+        if (data.data) {
+            console.log("backend crop",data.data);
+            return data.data;
+        }
+        else {
+            return null;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
