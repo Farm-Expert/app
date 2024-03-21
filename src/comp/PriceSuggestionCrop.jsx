@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 
-export default function PriceSuggestionCrop({crop, navigation}) {
+export default function PriceSuggestionCrop({ crop, navigation }) {
+    const capitalizedCropName = crop.charAt(0).toUpperCase() + crop.slice(1);
+
     return (
-        <TouchableOpacity activeOpacity={0.7} className="pr-5">
-            <View className="h-20 rounded-full w-20 overflow-hidden">
-                <Image source={{ uri: crop.img }} style={{ width: '100%', height: '100%' }} />
-            </View>
-            <Text className="text-white font-bold text-center">{crop.name}</Text>
-        </TouchableOpacity>
+        <View style={{ width: 130 }} className="bg-green-100 mr-5 h-full flex items-center justify-around p-5 rounded-3xl">
+            <Text className="font-bold text-xl">{capitalizedCropName}</Text>
+        </View>
     )
 }

@@ -7,7 +7,7 @@ export const pricePredict = async (CropName, Location)=>{
             data.data.Success = data.data.Success.substring(7, data.data.Success.length-3)
             const parseData = JSON.parse(data.data.Success);
             console.log("price backend",parseData);
-            return parseData
+            return parseData;
         }
         else {
             return null;
