@@ -8,8 +8,10 @@ import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
 import back from "../assets/back.png";
 import crop_json from './data/crop_json';
+import { cropPredict } from './auth/ml_api';
+import { useNavigation } from '@react-navigation/native';
 
-export default function SoilForm({navigation}) {
+export default function SoilForm({ navigation }) {
   const [Nitrogen, setNitrogen] = useState("");
   const [Phosphorous, setPhosphorous] = useState("");
   const [Potassium, setPotassium] = useState("");
@@ -19,34 +21,48 @@ export default function SoilForm({navigation}) {
   const [pH, setPH] = useState("");
   const [isCheckedPrev, setisCheckedPrev] = useState(false);
   const [isCheckedCurr, setisCheckedCurr] = useState(false);
-  const user_data=useSelector(state => state.value);
+  const user_data = useSelector(state => state.value);
 
   function showToast(message) {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   }
 
   // to store all soil history
-  const handleSubmit = async () => {
+  const handleSubmitHistory = async () => {
     if (Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
-    const data = await submitSoil(user_data.payload.token, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
-    if (data) {
-      showToast(data);
-      handleRefresh();
-    }
-    else {
-      showToast("Failed");
+      const data = await submitSoil(user_data.payload.token, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
+      if (data) {
+        showToast(data);
+        handleRefresh();
+      }
+      else {
+        showToast("Failed");
+      }
     }
   }
+
+  const handleSubmitForm = async () => {
+    const data = await cropPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall);
+    if (data){
+      console.log("soil",data);
+      // navigation.navigate("Predict",{data});
+    }
+  }
+
+
+  const handleSubmit = async () => {
+    handleSubmitHistory();
+    handleSubmitForm();
   }
 
   // to store soil history as curr ie in profile
   const handleSoilFormHistory = async () => {
-    const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address,user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
-    console.log("curr",data);
-    if(data){
+    const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address, user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
+    console.log("curr", data);
+    if (data) {
       showToast(data);
     }
-    else{
+    else {
       showToast("failed adding soil history as current");
     }
   }
@@ -57,30 +73,30 @@ export default function SoilForm({navigation}) {
   }
 
   const getPrevData = async () => {
-      setNitrogen(`${user_data.payload.user.nitrogen}`);
-      setPhosphorous(`${user_data.payload.user.phosphorous}`);
-      setPotassium(`${user_data.payload.user.potassium}`);
-      setHumidity(`${user_data.payload.user.humidity}`);
-      setTemperature(`${user_data.payload.user.temperature}`);
-      setRainfall(`${user_data.payload.user.rainfall}`);
-      setPH(`${user_data.payload.user.ph}`);
+    setNitrogen(`${user_data.payload.user.nitrogen}`);
+    setPhosphorous(`${user_data.payload.user.phosphorous}`);
+    setPotassium(`${user_data.payload.user.potassium}`);
+    setHumidity(`${user_data.payload.user.humidity}`);
+    setTemperature(`${user_data.payload.user.temperature}`);
+    setRainfall(`${user_data.payload.user.rainfall}`);
+    setPH(`${user_data.payload.user.ph}`);
   }
 
-  const handleCurrCheck=(e)=>{
-    if(e){
+  const handleCurrCheck = (e) => {
+    if (e) {
       handleSoilFormHistory();
     }
     else return
   }
 
-  const handlePrevCheck=(e)=>{
-    if(e){
+  const handlePrevCheck = (e) => {
+    if (e) {
       getPrevData();
     }
     else handleRefresh();
   }
 
-  const handleRefresh = ()=>{
+  const handleRefresh = () => {
     setNitrogen("");
     setPhosphorous("");
     setPotassium("");
@@ -100,7 +116,7 @@ export default function SoilForm({navigation}) {
         <Image source={img} className="h-full w-screen m-4 p-4" style={styles.img} />
       </View>
       <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-10">
-            <Image source={back} style={{ width: 20, height: 20 }} />
+        <Image source={back} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
 
       <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
