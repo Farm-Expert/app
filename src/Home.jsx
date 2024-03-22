@@ -194,6 +194,15 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">Chat With Agro Expert</Text>
                 </View>
               </TouchableOpacity>
+              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("chatbot")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+                <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
+                  <Image source={chatbot} className="rounded-3xl h-full w-full" />
+                </View>
+                <View className='w-full h-1/6' >
+                  <Text className="text-black font-bold text-center">Chat Bot</Text>
+                  <Text className="text-center text-slate-500 text-xs">Chat With Agro Expert</Text>
+                </View>
+              </TouchableOpacity>
             </View>
           </ScrollView>
           <View className="flex mt-2 items-center justify-center mb-2">
