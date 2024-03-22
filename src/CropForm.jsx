@@ -79,21 +79,20 @@ export default function CropForm({ navigation }) {
     }
   }
 
-
   const getPrevData = async () => {
-    // setCropName("");
-    // setNitrogen(`${user_data.payload.user.nitrogen}`);
-    // setPhosphorous(`${user_data.payload.user.phosphorous}`);
-    // setPotassium(`${user_data.payload.user.potassium}`);
-    // setHumidity(`${user_data.payload.user.humidity}`);
-    // setTemperature(`${user_data.payload.user.temperature}`);
-    // setRainfall(`${user_data.payload.user.rainfall}`);
-    // setPH(`${user_data.payload.user.ph}`);
+    setCropName("");
+    setNitrogen(`${user_data.payload.user.nitrogen}`);
+    setPhosphorous(`${user_data.payload.user.phosphorous}`);
+    setPotassium(`${user_data.payload.user.potassium}`);
+    setHumidity(`${user_data.payload.user.humidity}`);
+    setTemperature(`${user_data.payload.user.temperature}`);
+    setRainfall(`${user_data.payload.user.rainfall}`);
+    setPH(`${user_data.payload.user.ph}`);
     // const data = await cropPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall);
     // console.log(data.K);
-    console.log("front", Nitrogen);
-    const data2 = await soilPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall, Cropname)
-    console.log("fronttt", data2.K);
+    // console.log("front", Nitrogen);
+    // const data2 = await soilPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall, Cropname)
+    // console.log("fronttt", data2.K);
   }
 
   const handleCurrCheck = (e) => {
@@ -107,7 +106,7 @@ export default function CropForm({ navigation }) {
     if (e) {
       getPrevData();
     }
-    // else handleRefresh();
+    else handleRefresh();
   }
 
   const handleRefresh = () => {

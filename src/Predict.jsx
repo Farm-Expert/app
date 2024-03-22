@@ -2,13 +2,12 @@ import React from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import CropScroll from './comp/CropScroll';
-import back from "../assets/back.png"
+import back from "../assets/back.png";
 import { search_crop } from './auth/recent';
 
 
 export default function Predict({ navigation, route }) {
   const { crop } = route.params;
-
   function showToast(message) {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   }
