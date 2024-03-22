@@ -4,9 +4,9 @@ export const pricePredict = async (CropName, Location)=>{
     try {
         const data = await axios.post('https://diseases-and-price-prid.onrender.com/priceprediction', {CropName, Location})
         if (data.data) {
-            data.data.Success = data.data.Success.substring(7, data.data.Success.length-3)
+            // data.data.Success = data.data.Success.substring(7, data.data.Success.length-3)
             const parseData = JSON.parse(data.data.Success);
-            console.log("price backend",parseData);
+            console.log("price backend",data.data.Success);
             return parseData;
         }
         else {
