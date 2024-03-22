@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, TextInput } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, ScrollView, TouchableOpacity, StatusBar, TextInput, ActivityIndicator } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import CropScroll from './comp/CropScroll';
 import back from "../assets/back.png";
@@ -30,8 +30,10 @@ export default function PricePredict({ navigation }) {
     const [suggestedLocation, setSuggestedLocation] = useState([]);
     const [showComponent, setShowComponent] = useState(false);
     const user_data = useSelector(state => state.value)
+    const [loading, setLoading] = useState(false);
 
     const handlePredict = async () => {
+        setLoading(true);
         if (search) {
             const data = await pricePredict(search, user_data.payload.user.address);
             if (data) {
@@ -51,22 +53,14 @@ export default function PricePredict({ navigation }) {
         else {
             Alert.alert("Failed")
         }
+        setLoading(false);
     }
-
-    // const handleDisease = async () => {
-    //     console.log("predict");
-    //     // const data = await pricePredict("mango", "indore");
-    //     // const data1 = await diseasePredict("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTGPutPjeeswgPGpoVYE7SfBSOKChl_FCB1zA&s");
-    //     const data2 = await diseasePredict("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnuwXIC8XWUG4JByPU7FteFFro1TWkw4Nuig&s")
-    // }
-
-
     return (
         <ImageBackground
             source={bgimage}
             style={styles.backgroundImage}
         >
-            <StatusBar backgroundColor='transparent'
+            <StatusBar backgroundColor='#00000060'
                 barStyle='light-content'
                 color='white'
                 hidden={false}
@@ -74,7 +68,7 @@ export default function PricePredict({ navigation }) {
                 networkActivityIndicatorVisible={true}
                 showHideTransition='slide'
             />
-
+            {loading &&<View className="absolute z-50 w-screen flex items-center justify-center" style={{backgroundColor:"#00000060",height:1000}}><ActivityIndicator size="large" color="#0000ff" /></View>}
             <TouchableOpacity onPress={() => navigation.navigate("Home")} className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-12">
                 <Image source={back} style={{ width: 20, height: 20 }} />
             </TouchableOpacity>
@@ -98,19 +92,19 @@ export default function PricePredict({ navigation }) {
                                 <View className=" items-center top-0 h-20 w-20 justify-start rounded-lg overflow-hidden">
                                     <Image source={crop2} className="rounded-full h-full w-full m-0 p-0" width={28} style={styles.priceimg} />
                                 </View>
-                                <Text className="text-white mt-2 w-full mb-6 font-bold text-center text-4xl">{cropName}</Text>
+                                <Text className="text-white pr-5 mt-2 w-full mb-6 font-bold text-center text-4xl">{cropName}</Text>
                             </View>
 
                             <View className="flex flex-row justify-around w-full">
                                 <View className="flex flex-wrap w-1/4 items-center">
                                     <EvilIcons name="location" size={30} color="black" />
                                     <Text className="text-white font-bold w-full text-center text-2xl mt-2">{location}</Text>
-                                    <Text className=" w-full text-center text-sm text-gray-300" style={{ color: "black" }}>India</Text>
+                                    {/* <Text className=" w-full text-center text-sm text-gray-300" style={{ color: "black" }}>India</Text> */}
                                 </View>
                                 <View className="flex flex-wrap w-1/4 items-center">
                                     <Ionicons name="pricetag-outline" size={20} color="black" />
                                     <Text className="text-white font-bold w-full text-center text-2xl mt-2">{price}</Text>
-                                    <Text className=" w-full text-center text-sm text-gray-300" style={{ color: "black" }}>{priceType}</Text>
+                                    {/* <Text className=" w-full text-center text-sm text-gray-300" style={{ color: "black" }}>{priceType}</Text> */}
                                 </View>
                             </View>
 

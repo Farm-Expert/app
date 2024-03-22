@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, ImageBackground, StyleSheet, Image, TouchableOpacity, ToastAndroid, Button } from 'react-native';
+import { View, Text, ImageBackground, StyleSheet, Image, TouchableOpacity, ToastAndroid, Button, StatusBar } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/lead_disease.png';
 import back from "../assets/back.png"
@@ -7,6 +7,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { storage } from './firebase/firebaseconfig';
 import { ActivityIndicator } from 'react-native';
+import { diseasePredict } from './auth/ml_api';
 
 const Plant_Disease = ({ navigation }) => {
   const [imgSrc, setImgSrc] = useState(null);
@@ -15,16 +16,22 @@ const Plant_Disease = ({ navigation }) => {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   };
   const handleUpload = async () => {
-    // const data = await submitDisease(user_data.payload.token, imgSrc)
-    // if (data) {
-      console.log(imgSrc,"Plant Disease");
-      navigation.navigate("PredictDisease",{img: imgSrc})
-      
-    //   Alert.alert(data)
-    // }
-    // else {
-    //   Alert.alert("Failed")
-    // }
+    setLoading(true);
+    const data = await diseasePredict(imgSrc);
+    console.log(data, "predict data")
+    if (data && data.success) {
+      if(data.success === "fail"){
+        showToast('Please upload a valid image!');
+        setLoading(false);
+        return;
+      }
+      setLoading(false);
+      navigation.navigate("PredictDisease",{img: imgSrc,disease_name: data.disease_name,plant_name: data.plant_name,precautions: data.precautions,symptoms: data.symptoms,treatment: data.treatment})
+    }
+    else {
+      showToast('No disease detected');
+    }
+    setLoading(false);
   }
   useEffect(() => {
     (async () => {
@@ -66,8 +73,7 @@ const Plant_Disease = ({ navigation }) => {
 
   const upload_image = async () => {
     if (imgSrc) {
-      // logic to send image to backend
-      showToast('Image uploaded successfully!');
+      await handleUpload();
       setImgSrc(null);
     } else {
       showToast('Please upload an image to get started!');
@@ -76,13 +82,21 @@ const Plant_Disease = ({ navigation }) => {
 
   return (
     <ImageBackground source={bgimage} style={styles.backgroundImage}>
-        {loading &&<View className="absolute mt-10 z-50 w-screen h-screen flex items-center justify-center" style={{backgroundColor:"#00000060"}}><ActivityIndicator size="large" color="#0000ff" /></View>}
+      <StatusBar backgroundColor='#00000060'
+        barStyle='light-content'
+        color='white'
+        hidden={false}
+        translucent={true}
+        networkActivityIndicatorVisible={true}
+        showHideTransition='slide'
+      />
+        {loading &&<View className="absolute z-50 w-screen flex items-center justify-center" style={{backgroundColor:"#00000060",height:1000}}><ActivityIndicator size="large" color="#0000ff" /></View>}
       <View className="flex w-screen flex-row items-center justify-center m-0 p-0">
         <Image source={img} className="h-full w-screen m-4 p-4" style={styles.img} />
       </View>
       <TouchableOpacity
         onPress={() => navigation.navigate('Home')}
-        className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-10"
+        className="absolute w-10 left-5 flex items-center justify-center h-10 bg-white rounded-full top-12"
       >
         <Image source={back} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
@@ -104,7 +118,7 @@ const Plant_Disease = ({ navigation }) => {
           style={styles.uploadButton}
           onPress={upload_image}
         >
-          <Text className="text-xl font-bold text-white text-center" title="upload" onPress={handleUpload}>Upload Image</Text>
+          <Text className="text-xl font-bold text-white text-center" title="upload">Predict Disease</Text>
         </TouchableOpacity>
       </View>
       <View className="flex-1 mt-4, rounded-tl-xl rounded-tr-xl" style={{backgroundColor:"#ffffff70"}}>
