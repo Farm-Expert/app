@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+rimport { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Home from './src/Home';
 import { Provider } from "react-redux";
@@ -12,10 +12,9 @@ import Signup from './src/Signup';
 import Plant_Disease from './src/Plant_Disease';
 import ChatScreen from './src/chatbot';
 import PredictDisease from './src/PredictDisease';
-import PricePredict from './src/PricePredict';
+import  PricePredict  from './src/PricePredict';
 import * as SecureStore from 'expo-secure-store';
 import { useEffect, useState } from 'react';
-import Loading from './src/Loading';
 const Stack = createNativeStackNavigator();
 
 
@@ -23,26 +22,20 @@ export default function App() {
   async function getValueFor(key) {
     let result = await SecureStore.getItemAsync(key);
     if (result) {
-      return result
+        return result
     }
   }
-  const [token, setToken] = useState("loading");
-  const [profileIMG, setProfileIMG] = useState(null);
-  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       const token = await getValueFor("token");
       if (token != null) {
+        setToken(token);
         let data = await getValueFor("user");
         data = JSON.parse(data);
-        setUser(data);
         const profileIMG = await getValueFor("profile_img");
-        setProfileIMG(profileIMG);
-        setToken(token);
-      }
-      else {
-        setToken(null);
+
       }
     }
     fetchData();
@@ -51,10 +44,13 @@ export default function App() {
     <Provider store={Store}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Loading" component={Loading} options={{ headerShown: false }} />
+          {token!=null && <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />}
+          {token==null && <>
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Signup" component={Signup} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          </>
+          }
           <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
           <Stack.Screen name="Predict" component={Predict} options={{ headerShown: false }} />
           <Stack.Screen name="Soil" component={SoilForm} options={{ headerShown: false }} />

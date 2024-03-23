@@ -1,13 +1,16 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Image, View, Text, TextInput, TouchableOpacity, StatusBar, ToastAndroid } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
-import * as Speech from 'expo-speech';
 import { login } from './auth/auth';
-import { Alert } from 'react-native';
 import { add, addProfileimage } from '../redux/Auth';
 import { useDispatch } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
+
+async function save(key, value) {
+    await SecureStore.setItemAsync(key, value);
+  }
 
 export default function Login({ navigation }) {
 
@@ -30,10 +33,15 @@ export default function Login({ navigation }) {
         const data=await login(Email,Password)
         if(data!=null && data.token){
             dispatch(add(data));
-            if(data.user.profileimg!=null && data.user.profileimg!="")dispatch(addProfileimage(data.user.profileimg));
+            if(data.user.profileimg!=null && data.user.profileimg!=""){
+                dispatch(addProfileimage(data.user.profileimg));
+                save("profile_img",data.user.profileimg)
+            }
             setEmail("");
             setPassword("");
             showToast("Logged in successfully!");
+            save("token",data.token)
+            save("user",JSON.stringify(data))
             navigation.navigate("Home")
         }
         else{
