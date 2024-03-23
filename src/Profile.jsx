@@ -15,8 +15,19 @@ import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import * as ImagePicker from 'expo-image-picker';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProfileimage } from '../redux/Auth';
+import { add, addProfileimage } from '../redux/Auth';
 import { TextInput } from 'react-native';
+import * as SecureStore from 'expo-secure-store';
+
+async function save(key, value) {
+    await SecureStore.setItemAsync(key, value);
+  }
+  
+
+async function deleteKey(key){
+    await SecureStore.deleteItemAsync(key)
+};
+
 
 export default function Profile({ navigation }) {
     const [Nitrogen, setNitrogen] = useState("");
@@ -27,7 +38,7 @@ export default function Profile({ navigation }) {
     const [Rainfall, setRainfall] = useState("");
     const [pH, setPH] = useState("");
     const [imgsrc, setImgSrc] = useState(useSelector(state => state.profile_img));
-    const user_data = useSelector(state => state.value)
+    let user_data= useSelector(state => state.value)
     const dispatch = useDispatch();
     const [editMode, setEditMode] = useState(false);
     const [name, setName] = useState(user_data.payload.user.name);
@@ -63,13 +74,34 @@ export default function Profile({ navigation }) {
         // Update profile here with the new data
         try {
             const data = await updateProfile(
-                user_data.payload.token, name, mobile, address, kisanId, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH
+                user_data.payload.token, name, mobile, address, kisanId, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, imgsrc
             );
             if (data) {
-                setName(name);
-                setMobile(mobile);
-                setAddress(address);
-                setKisanId(kisanId);
+
+                const updated_ptofile={
+                    "token": user_data.payload.token, 
+                    "user": {
+                        "__v": user_data.payload.user.__v, 
+                        "_id": user_data.payload.user._id,
+                        "address": address, 
+                        "email": user_data.payload.user.email, 
+                        "humidity": user_data.payload.user.humidity, 
+                        "kisanid": kisanId, 
+                        "mobile": mobile,
+                        "name": name,
+                        "nitrogen": user_data.payload.user.nitrogen, 
+                        "password": user_data.payload.user.password,
+                        "ph": user_data.payload.user.ph,
+                        "phosphorous": user_data.payload.user.phosphorous,
+                        "potassium": user_data.payload.user.potassium, 
+                        "rainfall": user_data.payload.user.rainfall, 
+                        "temperature": user_data.payload.user.temperature,
+                        "profileimg": imgsrc
+                    }
+                }
+                console.log(updated_ptofile);
+                save("user",JSON.stringify(updated_ptofile))
+                dispatch(add(updated_ptofile));
                 showToast('Profile updated successfully!');
                 toggleEditMode(); // Exit edit mode after saving changes
             } else {
@@ -108,6 +140,7 @@ export default function Profile({ navigation }) {
                 const img_URL = await getDownloadURL(storageRef)
                 dispatch(addProfileimage(img_URL));
                 setImgSrc(img_URL);
+                save("profile_img",img_URL)
                 const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address, user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, img_URL)
                 if (data) {
                     console.log("profile updated", img_URL);
@@ -122,11 +155,18 @@ export default function Profile({ navigation }) {
         }
     };
 
+    const handleLogout = async () => {
+        deleteKey("token");
+        deleteKey("user");
+        deleteKey("profile_img");
+        navigation.navigate("Login");
+    }
+
 
 
     const share = () => {
         console.log("share")
-        const profile_link = `http://myfarmexpert.tech:5050/share/${user_data.payload.token}`
+        const profile_link = `https://farm-expert-app-backend-beige.vercel.app/share/${user_data.payload.token}`
         console.log(profile_link);
         console.log(user_data.payload.user);
         Clipboard.setString(profile_link);
@@ -167,7 +207,7 @@ export default function Profile({ navigation }) {
                 </View>
             ) : ( // Render Text field when editMode is false
                 <Text style={{ marginBottom: 4, fontWeight: 'bold', fontSize: 20, color: 'white' }}>
-                    Hi {user_data.payload.user.name}
+                    Hi {name}
                 </Text>
             )}
             {/* <TextInput></TextInput> */}
@@ -199,7 +239,7 @@ export default function Profile({ navigation }) {
                                 </TouchableOpacity>
                             </View>
                         ) : ( // Render Text field when editMode is false
-                            <Text className="text-center">{user_data.payload.user.mobile}</Text>
+                            <Text className="text-center">{mobile}</Text>
                         )}
                     </View>
                 </View>
@@ -222,7 +262,7 @@ export default function Profile({ navigation }) {
                                 </TouchableOpacity>
                             </View>
                         ) : ( // Render Text field when editMode is false
-                            <Text className="text-center">{user_data.payload.user.kisanid}</Text>
+                            <Text className="text-center">{kisanId}</Text>
                         )}
                     </View>
                 </View>
@@ -246,7 +286,7 @@ export default function Profile({ navigation }) {
                                 </TouchableOpacity>
                             </View>
                         ) : ( // Render Text field when editMode is false
-                            <Text className="text-center">{user_data.payload.user.address}</Text>
+                            <Text className="text-center">{address}</Text>
                         )}
                     </View>
                 </View>
@@ -290,7 +330,7 @@ export default function Profile({ navigation }) {
                         </View>
                         <View style={{ width: 2, height: 35, backgroundColor: "black" }}></View>
                         <View className="flex items-center justify-center flex-1">
-                            <TouchableOpacity onPress={() => navigation.navigate('Login')} className="w-full h-full flex items-center justify-center">
+                            <TouchableOpacity onPress={handleLogout} className="w-full h-full flex items-center justify-center">
                                 <MaterialIcons name="logout" size={24} color="black" />
                                 <Text className="font-bold">Log out</Text>
                             </TouchableOpacity>
