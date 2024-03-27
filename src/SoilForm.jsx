@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
-import { recentSoilForm, submitSoil } from './auth/recent';
+import { recentSoilForm, search_crop, submitSoil } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
@@ -22,12 +22,25 @@ export default function SoilForm({ navigation }) {
   const [isCheckedPrev, setisCheckedPrev] = useState(false);
   const [isCheckedCurr, setisCheckedCurr] = useState(false);
   const user_data = useSelector(state => state.value);
+  const [newLabel, setNewLabel] = useState("");   // this is for displaying history (not completed)
 
   function showToast(message) {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   }
 
+   // to get soil history
+   const getRecentSoil = async () => {
+    const data = await recentSoilForm(user_data.payload.token);
+    // console.log("history", data);
+    // console.log("newlabel",newLabel);
+  }
+
+  useEffect(() => {
+    getRecentSoil();
+  }, [user_data.payload.token]);
+
   // to store all soil history
+  // this api stores the current info in the crop history on clicking submit button
   const handleSubmitHistory = async () => {
     if (Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
       const data = await submitSoil(user_data.payload.token, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
@@ -41,11 +54,27 @@ export default function SoilForm({ navigation }) {
     }
   }
 
+  // this api handles the crop form submission to the ML Server
   const handleSubmitForm = async () => {
     const data = await cropPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall);
     if (data){
-      console.log("soil",data);
-      // navigation.navigate("Predict",{data});
+      // console.log("soil",data);   
+      const response = await search_crop(data.label);
+      if (response) {
+        // console.log("res",response);
+        response.crop[0] = data.N;
+        response.crop[1] = data.P;
+        response.crop[2] = data.K;
+        response.crop[3] = data.temperature;
+        response.crop[4] = data.humidity;
+        response.crop[6] = data.rainfall;
+        response.crop[5] = data.ph;     
+        // setNewLabel(response.cn[0]);
+        navigation.navigate("Predict", { crop: response })
+      }
+      else{
+        console.log("error in search_crop");
+      }
     }
   }
 
@@ -65,12 +94,7 @@ export default function SoilForm({ navigation }) {
     else {
       showToast("failed adding soil history as current");
     }
-  }
-
-  // to get soil history
-  const getRecentSoil = async () => {
-    const data = await recentSoilForm(user_data.payload.token);
-  }
+  } 
 
   const getPrevData = async () => {
     setNitrogen(`${user_data.payload.user.nitrogen}`);

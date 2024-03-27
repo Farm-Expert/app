@@ -99,15 +99,10 @@ export const recentSoilForm = async (token) => {
             "authorization": `Bearer ${token}`
         };
         const data = await axios.get(API + 'recent/recent_soil', { headers });
-        console.log("inside api",data.data);
-        const arr=data.data.recentSearch
-        console.log("type", typeof arr);
-        if (arr && Array.isArray(arr) && arr.length > 0) {
-            console.log("final", arr[arr.length - 1]);
-            return arr[arr.length - 1]; 
+        if (data.data) {
+            return data.data;
         }
         else {
-            console.log("failed");
             return null
         }
     } catch (error) {

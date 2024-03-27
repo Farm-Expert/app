@@ -50,7 +50,8 @@ export default function CropForm({ navigation }) {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   }
 
-  const handleSubmit = async () => {
+  // this api stores the current info in the crop history on clicking submit button
+  const handleSubmitHistory = async()=> {
     if (Cropname != "" && Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
       const cropNames = crop_json.map(crop => crop.name);
       const matches = stringSimilarity.findBestMatch(Cropname, cropNames);
@@ -67,6 +68,21 @@ export default function CropForm({ navigation }) {
     else {
       showToast("Please fill all the fields")
     }
+  }
+
+  // this api handles the crop form submission to the ML Server
+  const handleSubmitForm = async()=>{
+    // axios error coming from backend
+    const data = await soilPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, Cropname);
+    if (data){
+      console.log("soil",data);
+      // search wali api ko cropname do, phir uske reponse m , response.nitrogen= data.nitrogen krte jao, phir predict m pass kr do
+    }    
+  }
+
+  const handleSubmit = () => {
+    handleSubmitHistory();
+    handleSubmitForm();
   }
 
   const handleCropFormHistory = async () => {
@@ -95,6 +111,7 @@ export default function CropForm({ navigation }) {
     // console.log("fronttt", data2.K);
   }
 
+  // add this info as curr info
   const handleCurrCheck = (e) => {
     if (e) {
       handleCropFormHistory();
@@ -102,6 +119,7 @@ export default function CropForm({ navigation }) {
     else return
   }
 
+  // fill form from prev info
   const handlePrevCheck = (e) => {
     if (e) {
       getPrevData();
