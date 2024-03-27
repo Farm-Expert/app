@@ -53,12 +53,12 @@ export default function Predict({ navigation, route }) {
       <View className="p-5 w-screen" style={{ height: 150 }}>
         <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
           <CropScroll name={"Nitrogen"} value={crop.crop[0]} />
-          <CropScroll name={"PH"} value={crop.crop[5]} />
-          <CropScroll name={"Temperature"} value={crop.crop[3]} />
           <CropScroll name={"Phosphorus"} value={crop.crop[1]} />
-          <CropScroll name={"Rainfall"} value={crop.crop[6]} />
           <CropScroll name={"Potassium"} value={crop.crop[2]} />
-          <CropScroll name={"Humidity"} value={crop.crop[4]} />
+          <CropScroll name={"Temperature"} value={crop.crop[3]} />
+          <CropScroll name={"Humidity"} value={crop.crop[4]} />        
+          <CropScroll name={"Rainfall"} value={crop.crop[6]} />
+          <CropScroll name={"PH"} value={crop.crop[5]} />         
         </ScrollView>
       </View>
 

@@ -344,12 +344,12 @@ export default function Profile({ navigation }) {
                 <View className="p-5" style={{ height: 150 }}>
                     <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
                         <CropScroll name={"Nitrogen"} value={Nitrogen} />
-                        <CropScroll name={"PH"} value={pH} />
-                        <CropScroll name={"Temperature"} value={Temperature} />
                         <CropScroll name={"Phosphorus"} value={Phosphorous} />
-                        <CropScroll name={"Rainfall"} value={Rainfall} />
                         <CropScroll name={"Potassium"} value={Potassium} />
+                        <CropScroll name={"Temperature"} value={Temperature} />
                         <CropScroll name={"Humidity"} value={Humidity} />
+                        <CropScroll name={"Rainfall"} value={Rainfall} />
+                        <CropScroll name={"PH"} value={pH} />                  
                     </ScrollView>
                 </View>
             </View>
