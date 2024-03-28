@@ -41,18 +41,14 @@ export default function SoilForm({ navigation }) {
     }
   }
 
-  const handleSubmitForm = async () => {
+
+  const handleSubmit = async () => {
+    handleSubmitHistory();
     const data = await cropPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall);
     if (data){
       console.log("soil",data);
       // navigation.navigate("Predict",{data});
     }
-  }
-
-
-  const handleSubmit = async () => {
-    handleSubmitHistory();
-    handleSubmitForm();
   }
 
   // to store soil history as curr ie in profile
