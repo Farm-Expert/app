@@ -45,7 +45,7 @@ const ChatScreen = () => {
             style={styles.backgroundImage}
         >
             <View style={{ backgroundColor: "#ffffff" }} className="flex w-full absolute top-0 pt-10 items-center justify-center pb-4 rounded-lg px-4">
-                <Text className="font-bold text-2xl">Chat with Agro Expert</Text>
+                <Text className="font-bold text-2xl">Chat with Agri Tech</Text>
             </View>
             <View className="flex-1 pt-10 w-screen">
                 <ScrollView

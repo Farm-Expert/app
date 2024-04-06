@@ -38,7 +38,7 @@ export const soilPredict = async (N, P, K, temperature, humidity, ph, rainfall, 
     try {
         console.log("back", N);
         const data = await axios.post('https://crop-ai-backend.onrender.com/predict_soil', {N, P, K, temperature, humidity, ph, rainfall, label})
-        console.log("backkk",data);
+        console.log("backkk",data.data);
         if (data.data) {
             console.log("backend soil",data.data);
             return data.data;

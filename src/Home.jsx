@@ -17,12 +17,12 @@ import price from '../assets/price.jpg'
 
 
 export default function Home({ navigation }) {
-  const [text, setText] = useState('farm expert me aapka swagat hai');
+  const [text, setText] = useState('Welcome to Agri Tech');
   const imgsrc = useSelector(state => state.profile_img)
   const user_data = useSelector(state => state.value)
   const handleSpeak = async () => {
     if (text.trim() !== '') {
-      Speech.speak(text, { language: 'hin' });
+      Speech.speak(text, { language: 'eng' });
     }
   };
   const [search, setSearch] = useState("");
@@ -39,7 +39,7 @@ export default function Home({ navigation }) {
   }
 
   useEffect(() => {
-    handleSpeak();
+    // handleSpeak();
     handlesearch();
     addNews();
   }, [])
