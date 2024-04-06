@@ -153,7 +153,7 @@ export default function CropForm({ navigation }) {
         <Image source={back} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
       <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 m-4 bg-white">
-        <Text className="text-2xl font-bold">Crop Form</Text>
+        <Text className="text-2xl font-bold">Soil Form</Text>
         <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
             style={styles.checkbox}

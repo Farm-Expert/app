@@ -145,7 +145,7 @@ export default function Home({ navigation }) {
           </View>
           <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
             <View className="flex w-screen px-4 pt-2 flex-row items-start justify-center gap-2">
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={soil} className="rounded-3xl h-full w-full" />
                 </View>
@@ -154,7 +154,7 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={crop} className="rounded-3xl h-full w-full" />
                 </View>

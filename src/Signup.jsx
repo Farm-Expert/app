@@ -178,7 +178,6 @@ export default function Signup({ navigation }) {
                             setAddressFocus(false)
                             setKisanIdFocus(false)
                         }}
-                        keyboardType="visible-password"
                         secureTextEntry={showpassword == false ? true : false}
                     ></TextInput>
                     <Octicons name={showpassword == false ? "eye-closed" : "eye"} size={24}
