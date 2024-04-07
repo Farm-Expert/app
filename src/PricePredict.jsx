@@ -96,12 +96,12 @@ export default function PricePredict({ navigation }) {
                             </View>
 
                             <View className="flex flex-row justify-around w-full">
-                                <View className="flex flex-wrap w-1/4 items-center">
+                                <View className="flex w-2/4 flex-wrap items-center">
                                     <EvilIcons name="location" size={30} color="black" />
                                     <Text className="text-white font-bold w-full text-center text-2xl mt-2">{location}</Text>
                                     {/* <Text className=" w-full text-center text-sm text-gray-300" style={{ color: "black" }}>India</Text> */}
                                 </View>
-                                <View className="flex flex-wrap w-1/4 items-center">
+                                <View className="flex w-2/4 flex-wrap items-center">
                                     <Ionicons name="pricetag-outline" size={20} color="black" />
                                     <Text className="text-white font-bold w-full text-center text-2xl mt-2">{price}</Text>
                                     {/* <Text className=" w-full text-center text-sm text-gray-300" style={{ color: "black" }}>{priceType}</Text> */}
