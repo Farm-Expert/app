@@ -166,7 +166,7 @@ export default function Profile({ navigation }) {
 
     const share = () => {
         console.log("share")
-        const profile_link = `https://farm-expert-app-backend-beige.vercel.app/share/${user_data.payload.token}`
+        const profile_link = `https://share-profile-seven.vercel.app/${user_data.payload.token}`
         console.log(profile_link);
         console.log(user_data.payload.user);
         Clipboard.setString(profile_link);
