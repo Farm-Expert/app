@@ -17,12 +17,12 @@ import price from '../assets/price.jpg'
 
 
 export default function Home({ navigation }) {
-  const [text, setText] = useState('farm expert me aapka swagat hai');
+  const [text, setText] = useState('Welcome to Agri Tech');
   const imgsrc = useSelector(state => state.profile_img)
   const user_data = useSelector(state => state.value)
   const handleSpeak = async () => {
     if (text.trim() !== '') {
-      Speech.speak(text, { language: 'hin' });
+      Speech.speak(text, { language: 'eng' });
     }
   };
   const [search, setSearch] = useState("");
@@ -39,7 +39,7 @@ export default function Home({ navigation }) {
   }
 
   useEffect(() => {
-    handleSpeak();
+    // handleSpeak();
     handlesearch();
     addNews();
   }, [])
@@ -119,15 +119,6 @@ export default function Home({ navigation }) {
 
             <ScrollView horizontal={true} bouncesZoom={true} showsHorizontalScrollIndicator={false} bounces={true}>
               {
-                // crop_json.filter(crop => recent_crops.some(e => e.crop === crop.name)).map((crop, i) => {
-                //   console.log("Filtered crop:", crop.name); // Add the console.log here
-                //   return (
-                //     <Scroll key={i} crop={crop} navigation={navigation} />
-                //   );
-                // })
-                // recent_crops.filter(recentCrop => crop_json.some(crop => crop.name === recentCrop.crop))
-                //   .map((recentCrop, i) => {
-                //     const matchingCrop = crop_json.find(crop => crop.name === recentCrop.crop);
                 recent_crops.map((matchingCrop, i) => {
                   return (
                     <Scroll key={i} crop={matchingCrop} navigation={navigation} />
@@ -143,9 +134,9 @@ export default function Home({ navigation }) {
           <View className="flex items-center justify-center">
             <View style={{ height: 2 }} className="bg-slate-300  w-1/4"></View>
           </View>
-          <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-            <View className="flex w-screen px-4 pt-2 flex-row items-start justify-center gap-2">
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+          <View className="flex w-screen  pt-1 flex-row items-start justify-center pl-2 pr-2">
+            <ScrollView className="flex gap-4" showsHorizontalScrollIndicator={false} horizontal={true}>
+              <TouchableOpacity style={{ elevation: 10, width:200 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={soil} className="rounded-3xl h-full w-full" />
                 </View>
@@ -154,7 +145,7 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">for given Crop</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("Crop")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <TouchableOpacity style={{ elevation: 10, width:200 }} onPress={() => navigation.navigate("Soil")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={crop} className="rounded-3xl h-full w-full" />
                 </View>
@@ -163,9 +154,7 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">for given Soil Condition</Text>
                 </View>
               </TouchableOpacity>
-            </View>
-            <View className="flex w-screen px-4 pt-2 flex-row items-start justify-center gap-2">
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("disease")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <TouchableOpacity style={{ elevation: 10, width:200 }} onPress={() => navigation.navigate("disease")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={disease_plant} className="rounded-3xl h-full w-full" />
                 </View>
@@ -174,7 +163,7 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">for predicting plant disease</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("price")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <TouchableOpacity style={{ elevation: 10, width:200 }} onPress={() => navigation.navigate("price")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={price} className="rounded-3xl h-full w-full" />
                 </View>
@@ -183,9 +172,7 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">for predicting crop price</Text>
                 </View>
               </TouchableOpacity>
-            </View>
-            <View className="flex w-screen px-4 pt-2 flex-row items-start justify-center gap-2">
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("chatbot")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
+              <TouchableOpacity style={{ elevation: 10, width:200 }} onPress={() => navigation.navigate("chatbot")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
                 <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
                   <Image source={chatbot} className="rounded-3xl h-full w-full" />
                 </View>
@@ -194,17 +181,8 @@ export default function Home({ navigation }) {
                   <Text className="text-center text-slate-500 text-xs">Chat With Agro Expert</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ elevation: 10 }} onPress={() => navigation.navigate("chatbot")} activeOpacity={0.7} className=" h-60 w-1/2 flex items-center justify-start rounded-3xl bg-green-100">
-                <View className='w-full h-5/6' style={{ overflow: "hidden" }}>
-                  <Image source={chatbot} className="rounded-3xl h-full w-full" />
-                </View>
-                <View className='w-full h-1/6' >
-                  <Text className="text-black font-bold text-center">Chat Bot</Text>
-                  <Text className="text-center text-slate-500 text-xs">Chat With Agro Expert</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+            </ScrollView>
+          </View>
           <View className="flex mt-2 items-center justify-center mb-2">
             <View style={{ height: 2 }} className="bg-slate-400 w-5/6"></View>
             <Text className="text-slate-100 text-left w-full px-7 font-bold ">{"scroll->"}</Text>
@@ -237,8 +215,8 @@ export default function Home({ navigation }) {
             </ScrollView>
           </View>
         </ScrollView>
-      </View>
-    </ImageBackground>
+      </View >
+    </ImageBackground >
   );
 }
 

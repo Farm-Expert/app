@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
-import { recentSoilForm, submitSoil } from './auth/recent';
+import { recentSoilForm, search_crop, submitSoil } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
@@ -27,8 +27,8 @@ export default function SoilForm({ navigation }) {
     ToastAndroid.show(message, ToastAndroid.SHORT);
   }
 
-  // to store all soil history
-  const handleSubmitHistory = async () => {
+
+  const handleSubmit = async () => {
     if (Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
       const data = await submitSoil(user_data.payload.token, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
       if (data) {
@@ -39,18 +39,26 @@ export default function SoilForm({ navigation }) {
         showToast("Failed");
       }
     }
-  }
-
-
-  const handleSubmit = async () => {
-    handleSubmitHistory();
     const data = await cropPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall);
+    console.log("xy2", data.label);
     if (data){
-      console.log("soil",data);
-      // navigation.navigate("Predict",{data});
+      const response = await search_crop(data.label);
+      console.log("response", response);
+      if (response) {
+        response.crop[0] = data.N;
+        response.crop[1] = data.P;
+        response.crop[2] = data.K;
+        response.crop[3] = data.temperature;
+        response.crop[4] = data.humidity;
+        response.crop[6] = data.rainfall;
+        response.crop[5] = data.ph;     
+        navigation.navigate("Predict", { crop: response })
+      }
+      else{
+        console.log("error in search_crop");
+      }
     }
   }
-
   // to store soil history as curr ie in profile
   const handleSoilFormHistory = async () => {
     const data = await updateProfile(user_data.payload.token, user_data.payload.user.name, user_data.payload.user.mobile, user_data.payload.user.address, user_data.payload.user.kisanid, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH, user_data.payload.user.profileimage)
@@ -116,7 +124,7 @@ export default function SoilForm({ navigation }) {
       </TouchableOpacity>
 
       <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 bg-white">
-        <Text className="text-2xl font-bold">Soil Form</Text>
+        <Text className="text-2xl font-bold">Crop Form</Text>
         <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
             style={styles.checkbox}

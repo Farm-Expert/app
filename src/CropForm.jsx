@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, ImageBackground, StyleSheet, Image, TextInput, Button, KeyboardAvoidingView, TouchableOpacity, ScrollView, ToastAndroid } from 'react-native';
 import bgimage from '../assets/bg.webp';
 import img from '../assets/farming2.png';
-import { recentCropForm, submitCrop } from './auth/recent';
+import { recentCropForm, search_crop, submitCrop } from './auth/recent';
 import Checkbox from 'expo-checkbox';
 import { useSelector } from 'react-redux';
 import { updateProfile } from './auth/profileUpdate';
@@ -54,11 +54,29 @@ export default function CropForm({ navigation }) {
     if (Cropname != "" && Nitrogen != "" && Phosphorous != "" && Potassium != "" && Temperature != "" && Humidity != "" && Rainfall != "" && pH != "") {
       const cropNames = crop_json.map(crop => crop.name);
       const matches = stringSimilarity.findBestMatch(Cropname, cropNames);
-      const data = await submitCrop(user_data.payload.token, matches.bestMatch.target, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
+      let data = await submitCrop(user_data.payload.token, matches.bestMatch.target, Nitrogen, Phosphorous, Potassium, Temperature, Humidity, Rainfall, pH)
       if (data) {
         showToast(data);
         handleRefresh();
         getRecentCrop();
+        data = await soilPredict(Nitrogen, Phosphorous, Potassium, Temperature, Humidity, pH, Rainfall,  matches.bestMatch.target);
+        if (data){
+          const response = await search_crop(data.label);
+          console.log("response", response);
+          if (response) {
+            response.crop[0] = data.N;
+            response.crop[1] = data.P;
+            response.crop[2] = data.K;
+            response.crop[3] = data.temperature;
+            response.crop[4] = data.humidity;
+            response.crop[6] = data.rainfall;
+            response.crop[5] = data.ph;     
+            navigation.navigate("Predict", { crop: response })
+          }
+          else{
+            console.log("error in search_crop");
+          }
+        }
       }
       else {
         showToast("Failed");
@@ -135,7 +153,7 @@ export default function CropForm({ navigation }) {
         <Image source={back} style={{ width: 20, height: 20 }} />
       </TouchableOpacity>
       <KeyboardAvoidingView className="flex w-full flex-wrap rounded-3xl flex-row items-center justify-center h-fit p-6 m-4 bg-white">
-        <Text className="text-2xl font-bold">Crop Form</Text>
+        <Text className="text-2xl font-bold">Soil Form</Text>
         <View className="w-full flex-wrap flex flex-row items-center justify-start">
           <Checkbox
             style={styles.checkbox}

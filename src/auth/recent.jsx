@@ -117,7 +117,7 @@ export const recentSoilForm = async (token) => {
 
 export const search_crop=async (cropname)=>{
     try {
-        const data = await axios.post("https://search-crop.onrender.com/search_crop", { search: cropname });
+        const data = await axios.post("/https://search-crop.onrender.com/search_crop", { search: cropname });
         if (data.data.status=="success") {
             return data.data;
         }

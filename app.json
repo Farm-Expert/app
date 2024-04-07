@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "Farm Expert",
-    "slug": "Farm_Expert",
+    "name": "Agri Tech",
+    "slug": "Agri_Tech",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/logo.png",
+    "icon": "./assets/icon2.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/logo.png",
@@ -19,13 +19,18 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/logo.png",
+        "foregroundImage": "./assets/icon2.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.farmexpert.farmexpert"
+      "package": "com.arjun6261.Agri_Tech"
     },
     "web": {
       "favicon": "./assets/logo.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "cb988724-d390-40b9-9280-f2f576b238fd"
+      }
     }
   }
 }
