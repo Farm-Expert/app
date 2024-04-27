@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API="http://13.127.182.217:5050/"
+const API="https://farm-expert-app-backend-beige.vercel.app/"
 
 
 export const updateProfile=async (token, name ,mobile,address,kisanid,nitrogen, phosphorous, potassium, temperature, humidity, rainfall, ph, profileimg)=>{

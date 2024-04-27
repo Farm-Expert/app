@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API="http://13.127.182.217:5050/"
+const API="https://farm-expert-app-backend-beige.vercel.app/"
 
 export const signup = async (name, email, mobile, password, address, kisanid ) => {
     try {

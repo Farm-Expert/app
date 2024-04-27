@@ -37,7 +37,7 @@ export const diseasePredict = async (imgurl)=>{
 export const soilPredict = async (N, P, K, temperature, humidity, ph, rainfall, label)=>{
     try {
         console.log("back", N);
-        const data = await axios.post('http://13.127.182.217:8000/predict_soil', {N, P, K, temperature, humidity, ph, rainfall, label})
+        const data = await axios.post('https://crop-ai-backend.onrender.com/predict_soil', {N, P, K, temperature, humidity, ph, rainfall, label})
         console.log("backkk",data.data);
         if (data.data) {
             console.log("backend soil",data.data);
@@ -53,7 +53,7 @@ export const soilPredict = async (N, P, K, temperature, humidity, ph, rainfall, 
 
 export const cropPredict = async (N, P, K, temperature, humidity, ph, rainfall)=>{
     try {
-        const data = await axios.post('http://13.127.182.217:8000/predict_crop', {N, P, K, temperature, humidity, ph, rainfall})
+        const data = await axios.post('https://crop-ai-backend.onrender.com/predict_crop', {N, P, K, temperature, humidity, ph, rainfall})
         if (data.data) {
             console.log("backend crop",data.data);
             return data.data;
